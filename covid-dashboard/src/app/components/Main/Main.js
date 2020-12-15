@@ -5,26 +5,19 @@ import CovidTable from './CovidTable/CovidTable';
 import CovidDiagram from './CovidDiagram/CovidDiagram';
 
 export default class Main {
-    #covidList = null;
-    #covidMap = null;
-    #covidTable = null;
-    #covidDiagram = null;
-
-    constructor() {
-        this.#covidList = new CovidList().render();
-        this.#covidMap = new CovidMap().render();
-        this.#covidTable = new CovidTable().render();
-        this.#covidDiagram = new CovidDiagram().render();
-    }
-
     render() {
         const main = document.createElement('main');
+        const covidList = new CovidList().render();
+        const covidMap = new CovidMap().render();
+        const covidTable = new CovidTable().render();
+        const covidDiagram = new CovidDiagram().render();
+
         main.classList.add('main');
 
-        main.append(this.#covidList);
-        main.append(this.#covidMap);
-        main.append(this.#covidTable);
-        main.append(this.#covidDiagram);
+        main.append(covidList);
+        main.append(covidMap);
+        main.append(covidTable);
+        main.append(covidDiagram);
 
         return main;
     }
