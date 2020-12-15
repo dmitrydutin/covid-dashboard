@@ -42,6 +42,9 @@ module.exports = {
             title: 'Covid dashboard',
             favicon: path.resolve(__dirname, 'src', 'assets', 'favicon', 'favicon.svg'),
             publicPath: '',
+            meta: {
+                'theme-color': '#282C34',
+            },
         }),
         new ESLintPlugin(),
     ],
