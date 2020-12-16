@@ -45,26 +45,39 @@ export default class CovidMap extends Basic {
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('button-container');
         const buttonCases = document.createElement('button');
-        buttonCases.classList.add('button');
+        buttonCases.classList.add('map-button');
+        buttonCases.classList.add('active-button');
         buttonCases.textContent = 'Cases';
         buttonCases.addEventListener('click', () => {
             this.mapMarkers.clearLayers();
+            [...document.getElementsByClassName('map-button')].forEach((elem) => {
+                elem.classList.remove('active-button');
+            });
+            buttonCases.classList.add('active-button');
             this.drawCircles(mymap, data, 'cases', '#BC0000');
         });
 
         const buttonDeaths = document.createElement('button');
-        buttonDeaths.classList.add('button');
+        buttonDeaths.classList.add('map-button');
         buttonDeaths.textContent = 'Deaths';
         buttonDeaths.addEventListener('click', () => {
             this.mapMarkers.clearLayers();
+            [...document.getElementsByClassName('map-button')].forEach((elem) => {
+                elem.classList.remove('active-button');
+            });
+            buttonDeaths.classList.add('active-button');
             this.drawCircles(mymap, data, 'deaths', '#ffff0a');
         });
 
         const buttonRecovered = document.createElement('button');
-        buttonRecovered.classList.add('button');
+        buttonRecovered.classList.add('map-button');
         buttonRecovered.textContent = 'Recovered';
         buttonRecovered.addEventListener('click', () => {
             this.mapMarkers.clearLayers();
+            [...document.getElementsByClassName('map-button')].forEach((elem) => {
+                elem.classList.remove('active-button');
+            });
+            buttonRecovered.classList.add('active-button');
             this.drawCircles(mymap, data, 'recovered', '#00bc00');
         });
 
