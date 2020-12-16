@@ -20,6 +20,11 @@ L.Icon.Default.mergeOptions({
 const accessToken = 'sk.eyJ1IjoiYXNiYXJuIiwiYSI6ImNraW16YjR6czAzeXoyeW95cHUya3djdTIifQ.nhucE6in6G6-Np4PI-CyFA';
 
 export default class CovidMap extends Basic {
+    constructor() {
+        super();
+        this.mapMarkers = L.layerGroup();
+    }
+
     // рендерит попап с данными для страны
     renderPopup(elem, criterion) {
         const countryContainer = document.createElement('div');
@@ -36,17 +41,84 @@ export default class CovidMap extends Basic {
         return countryContainer;
     }
 
+    renderButtons(mymap, data) {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+        const buttonCases = document.createElement('button');
+        buttonCases.classList.add('button');
+        buttonCases.textContent = 'Cases';
+        buttonCases.addEventListener('click', () => {
+            this.mapMarkers.clearLayers();
+            this.drawCircles(mymap, data, 'cases', '#BC0000');
+        });
+
+        const buttonDeaths = document.createElement('button');
+        buttonDeaths.classList.add('button');
+        buttonDeaths.textContent = 'Deaths';
+        buttonDeaths.addEventListener('click', () => {
+            this.mapMarkers.clearLayers();
+            this.drawCircles(mymap, data, 'deaths', '#ffff0a');
+        });
+
+        const buttonRecovered = document.createElement('button');
+        buttonRecovered.classList.add('button');
+        buttonRecovered.textContent = 'Recovered';
+        buttonRecovered.addEventListener('click', () => {
+            this.mapMarkers.clearLayers();
+            this.drawCircles(mymap, data, 'recovered', '#00bc00');
+        });
+
+        buttonContainer.appendChild(buttonDeaths);
+        buttonContainer.appendChild(buttonCases);
+        buttonContainer.appendChild(buttonRecovered);
+        return buttonContainer;
+    }
+
+    drawCircles(mymap, data, criterion, color) {
+        // find max cases
+        const maxCases = data.reduce(
+            (prev, current) => ((prev[criterion] > current[criterion]) ? prev : current),
+        )[criterion];
+
+        // fetch data, render circles for all countries with popups
+        data.forEach((element) => {
+            const circle = L.circle([element.countryInfo.lat, element.countryInfo.long],
+                {
+                    color,
+                    fillColor: color,
+                    fillOpacity: 1,
+                    radius: 1000000 * (element[criterion] / maxCases), // draw by percentage
+                });
+
+            circle.bindPopup(this.renderPopup(element, criterion));
+            circle.on('mouseover', function () {
+                this.openPopup();
+            });
+            circle.on('mouseout', function () {
+                this.closePopup();
+            });
+
+            // change country in table
+            // circle.addEventListener('click', () => { this.setCountry(element.country); });
+            this.mapMarkers.addLayer(circle);
+            // circle.addTo(mymap);
+        });
+        this.mapMarkers.addTo(mymap);
+    }
+
     render() {
         const covidMap = document.createElement('div');
         const scaleButton = this.createScaleButton(covidMap);
-
+        const covidMapContainer = document.createElement('div');
+        covidMapContainer.classList.add('covid-map-container');
+        covidMapContainer.appendChild(covidMap);
         covidMap.classList.add('covid-map');
 
         covidMap.append(scaleButton);
 
         covidMap.id = 'mapid';
         // I need to have rendered in document node, to install map in it
-        document.body.appendChild(covidMap);
+        document.body.appendChild(covidMapContainer);
 
         const mymap = L.map('mapid', {
             worldCopyJump: true,
@@ -63,41 +135,15 @@ export default class CovidMap extends Basic {
         });
         CartoDBDarkMatter.addTo(mymap);
 
-        //
         // mymap.invalidateSize();
         setTimeout(() => { mymap.invalidateSize(); }, 500);
+
         fetch('https://disease.sh/v3/covid-19/countries').then((response) => response.json()).then((data) => {
             console.log(data);
-
-            // find max cases
-            const maxCases = data.reduce(
-                (prev, current) => ((prev.cases > current.cases) ? prev : current),
-            ).cases;
-
-            // fetch data, render circles for all countries with popups
-            data.forEach((element) => {
-                const circle = L.circle([element.countryInfo.lat, element.countryInfo.long],
-                    {
-                        color: '#BC0000',
-                        fillColor: '#BC0000',
-                        fillOpacity: 1,
-                        radius: 1000000 * (element.cases / maxCases), // draw by percentage
-                    });
-
-                circle.bindPopup(this.renderPopup(element, 'cases'));
-                circle.on('mouseover', function () {
-                    this.openPopup();
-                });
-                circle.on('mouseout', function () {
-                    this.closePopup();
-                });
-
-                // change country in table
-                circle.addEventListener('click', () => { this.setCountry(element.country); });
-                circle.addTo(mymap);
-            });
+            covidMapContainer.appendChild(this.renderButtons(mymap, data));
+            this.drawCircles(mymap, data, 'cases', '#BC0000');
         });
 
-        return covidMap;
+        return covidMapContainer;
     }
 }
