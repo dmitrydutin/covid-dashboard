@@ -1,21 +1,4 @@
-// import axios from 'axios';
+/* eslint-disable import/prefer-default-export */
+const getAllData = fetch('https://disease.sh/v3/covid-19/countries').then((response) => response.json());
 
-// * EXAMPLES *
-
-// export const mapAPI = {
-//     getMapInfo(login, password) {
-//         return axios.post('https://auth/login', { login, password });
-//     },
-//     me() {
-//         return axios.post('https://auth/me');
-//     },
-// };
-
-// export const createBonusAPI = {
-//     getCompaniesId(userId) {
-//         return axios.post('https://bonus/companiesId/get', { userId });
-//     },
-//     createBonus(title, amount) {
-//         return axios.post('https://bonus/create', { title, amount });
-//     },
-// };
+export { getAllData };
