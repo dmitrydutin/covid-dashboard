@@ -8,7 +8,7 @@ import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import Basic from '../Basic/Basic';
-import { getAllData } from '../../../api/api';
+import { mapAPI } from '../../../api/api';
 import { accessToken } from '../../../../common/constants';
 
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
@@ -23,6 +23,7 @@ export default class CovidMap extends Basic {
     constructor() {
         super();
         this.mapMarkers = LeafletMap.layerGroup();
+        this.data = [];
     }
 
     renderButton(mymap, data, name, circleColors, active) {
@@ -133,12 +134,20 @@ export default class CovidMap extends Basic {
 
         setTimeout(() => { mymap.invalidateSize(); }, 500);
 
-        getAllData.then((data) => {
-            console.log(data);
-            covidMapContainer.append(this.renderButtons(mymap, data));
-            this.drawCircles(mymap, data, 'cases', '#BC0000');
+        this.#fetchData().then(() => {
+            console.log(this.data);
+            this.#fetchData();
+            covidMapContainer.append(this.renderButtons(mymap, this.data));
+            this.drawCircles(mymap, this.data, 'cases', '#BC0000');
         });
 
         return covidMapContainer;
+    }
+
+    async #fetchData() {
+        const response = await mapAPI.getAllData();
+        if (response.status === 200) {
+            this.data = response.data;
+        } else throw new Error('COVID-19 API FETCH ERROR');
     }
 }
