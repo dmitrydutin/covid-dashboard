@@ -1,21 +1,10 @@
-// import axios from 'axios';
+import axios from 'axios';
 
-// * EXAMPLES *
+/* eslint-disable import/prefer-default-export */
+const headerAPI = {
+    getCountries() {
+        return axios.get('https://restcountries.eu/rest/v2/all?fields=name');
+    },
+};
 
-// export const mapAPI = {
-//     getMapInfo(login, password) {
-//         return axios.post('https://auth/login', { login, password });
-//     },
-//     me() {
-//         return axios.post('https://auth/me');
-//     },
-// };
-
-// export const createBonusAPI = {
-//     getCompaniesId(userId) {
-//         return axios.post('https://bonus/companiesId/get', { userId });
-//     },
-//     createBonus(title, amount) {
-//         return axios.post('https://bonus/create', { title, amount });
-//     },
-// };
+export { headerAPI };
