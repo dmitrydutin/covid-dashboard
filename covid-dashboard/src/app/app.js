@@ -1,8 +1,7 @@
 import Header from './components/Header/Header';
-import Diagram from './components/Diagram/Diagram';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
 
-const App = [
-    Header, Diagram,
-];
+const App = [Header, Main, Footer];
 
 export default App;

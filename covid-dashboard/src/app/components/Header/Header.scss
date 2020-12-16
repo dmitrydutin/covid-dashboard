@@ -1,0 +1,45 @@
+@import '../../../common/variables.scss';
+@import '../../../common/mixins.scss';
+
+.header {
+    min-height: 64px;
+    padding: 0 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: $primary-color;
+    @include block-shadow;
+
+    &__logo {
+        color: $primary-text-color;
+        @include header-logo;
+    }
+
+    &__search-input {
+        margin-left: 30px;
+        padding: 12px 14px 12px 45px;
+
+        flex-grow: 1;
+        max-width: 320px;
+        min-width: 150px;
+
+        color: $primary-text-color;
+        @include h2;
+
+        outline: none;
+        border-radius: 4px;
+        border: 1px solid $secondary-border-color;
+        background: no-repeat 13px center/19px
+            url('../../../assets/images/search.svg');
+
+        &:hover {
+            background-color: $secondary-color;
+        }
+
+        &:focus {
+            background-color: $secondary-color;
+        }
+    }
+}
