@@ -34,12 +34,15 @@ export default class CovidMap extends Basic {
 
         button.addEventListener('click', () => {
             this.mapMarkers.clearLayers();
+
             [...document.getElementsByClassName('map-button')].forEach((elem) => {
                 elem.classList.remove('active-button');
             });
+
             button.classList.add('active-button');
             this.drawCircles(mymap, data, name, circleColors);
         });
+
         return button;
     }
 
@@ -72,6 +75,7 @@ export default class CovidMap extends Basic {
         buttonContainer.append(buttonDeaths);
         buttonContainer.append(buttonCases);
         buttonContainer.append(buttonRecovered);
+
         return buttonContainer;
     }
 
@@ -99,21 +103,21 @@ export default class CovidMap extends Basic {
 
             this.mapMarkers.addLayer(circle);
         });
+
         this.mapMarkers.addTo(mymap);
     }
 
     render() {
-        const covidMap = document.createElement('div');
-        const scaleButton = this.createScaleButton(covidMap);
         const covidMapContainer = document.createElement('div');
+        const covidMap = document.createElement('div');
+        const scaleButton = this.createScaleButton(covidMapContainer);
+
         covidMapContainer.classList.add('covid-map-container');
         covidMapContainer.append(covidMap);
         covidMap.classList.add('covid-map');
 
-        covidMap.append(scaleButton);
-
         covidMap.id = 'mapid';
-
+        covidMapContainer.append(scaleButton);
         document.body.append(covidMapContainer);
 
         const mymap = LeafletMap.map('mapid', {
@@ -129,12 +133,12 @@ export default class CovidMap extends Basic {
             subdomains: 'abcd',
             accessToken,
         });
+
         CartoDBDarkMatter.addTo(mymap);
 
         setTimeout(() => { mymap.invalidateSize(); }, 500);
 
         this.#fetchData().then(() => {
-            console.log(this.data);
             this.#fetchData();
             covidMapContainer.append(this.renderButtons(mymap, this.data));
             this.drawCircles(mymap, this.data, 'cases', '#BC0000');
@@ -145,8 +149,11 @@ export default class CovidMap extends Basic {
 
     async #fetchData() {
         const response = await mapAPI.getAllData();
+
         if (response.status === 200) {
             this.data = response.data;
-        } else throw new Error('COVID-19 API FETCH ERROR');
+        } else {
+            throw new Error('COVID-19 API FETCH ERROR');
+        }
     }
 }
