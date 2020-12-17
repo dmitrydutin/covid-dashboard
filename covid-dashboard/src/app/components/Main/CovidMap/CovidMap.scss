@@ -1,8 +1,7 @@
 @import '../../../../common/variables.scss';
 @import '../../../../common/mixins.scss';
 
-$backgroundColorButton:rgb(0, 0, 0);
-$backgroundColorButtonActive:rgb(63, 63, 63);
+
 
 .covid-map-container{
     height:650px;
@@ -33,17 +32,17 @@ $backgroundColorButtonActive:rgb(63, 63, 63);
         width:100px;
         height: 30px;
         margin: 0 10px 10px ;
-            background-color:$backgroundColorButton;
+            background-color:$map-button-background-color;
             color:#ffff;
             outline:none;
-            border: 1px solid $backgroundColorButton;
-            border-bottom: 3px solid $backgroundColorButton;
+            border: 1px solid $map-button-background-color;
+            border-bottom: 3px solid $map-button-background-color;
             cursor:pointer;
 
     }
 
     .active-button{
         border-bottom: 3px solid #ffff;
-        background-color:$backgroundColorButtonActive;
+        background-color:$map-button-background-color-active;
     }
 }

@@ -31,6 +31,7 @@ export default class CovidMap extends Basic {
         button.classList.add('map-button');
         if (active) button.classList.add('active-button');
         button.textContent = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+
         button.addEventListener('click', () => {
             this.mapMarkers.clearLayers();
             [...document.getElementsByClassName('map-button')].forEach((elem) => {
@@ -65,9 +66,7 @@ export default class CovidMap extends Basic {
         buttonContainer.classList.add('button-container');
 
         const buttonCases = this.renderButton(mymap, data, 'cases', '#BC0000', true);
-
         const buttonDeaths = this.renderButton(mymap, data, 'deaths', '#ffff0a');
-
         const buttonRecovered = this.renderButton(mymap, data, 'recovered', '#00bc00');
 
         buttonContainer.append(buttonDeaths);
