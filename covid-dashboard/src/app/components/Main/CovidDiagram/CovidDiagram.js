@@ -4,14 +4,17 @@ import Basic from '../Basic/Basic';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
 import constants from '../../../../common/constants';
-// import Store from '../../Store/store';
+import Store from '../../Store/store';
 
 export default class CovidDiagram extends Basic {
-    #dataCasesValue = [];
-    #dataDeathsValue = [];
-    #dataRecoveredValue = [];
+    #globalDataCasesValue = [];
+    #globalDataDeathsValue = [];
+    #globalDataRecoveredValue = [];
+    #localeDataCasesValue = [];
+    #localeDataDeathsValue = [];
+    #localeDataRecoveredValue = [];
+    #localeDataPopulation = null;
     #dataDate = [];
-    #country = null;
 
     render() {
         const covidDiagram = document.createElement('div');
@@ -20,22 +23,25 @@ export default class CovidDiagram extends Basic {
         covidDiagram.classList.add('covid-diagram');
         covidDiagram.id = 'chart';
         covidDiagram.append(scaleButton);
-        this.getDiagram();
+        this.buildDiagram();
         return covidDiagram;
     }
 
-    async getDiagram() {
-        await this.getGlobalDataFromAPI();
-        // await this.getLocaleDataFromApi();
-
+    async buildDiagram() {
+        Store.subscribe(this.rerenderDiagram);
+        Store.country = 'America';
+        await this.getGlobalDataFromApi();
+        await this.getLocaleDataFromApi();
+        await this.getLocaleDataPopulationFromApi();
         const optionsCases = {
             colors: ['#8a85ff'],
             title: {
-                text: 'Global Cases',
+                text: `${Store.country || 'Global'}  Cases`,
             },
             series: [{
-                name: 'Global Cases',
-                data: this.#dataCasesValue[0],
+                name: `${Store.country || 'Global'}  Cases`,
+                data: Store.country
+                    ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0],
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -45,11 +51,12 @@ export default class CovidDiagram extends Basic {
         const optionsDeaths = {
             colors: ['#dd0e45'],
             title: {
-                text: `${this.#country || 'Global'} Deaths`,
+                text: `${Store.country || 'Global'} Deaths`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Deaths`,
-                data: this.#dataDeathsValue[0],
+                name: `${Store.country || 'Global'} Deaths`,
+                data: Store.country
+                    ? this.#localeDataDeathsValue[0] : this.#globalDataDeathsValue[0],
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -59,11 +66,12 @@ export default class CovidDiagram extends Basic {
         const optionsRecovered = {
             colors: ['#0edd5d'],
             title: {
-                text: `${this.#country || 'Global'} Recovered`,
+                text: `${Store.country || 'Global'} Recovered`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Recovered`,
-                data: this.#dataRecoveredValue[0],
+                name: `${Store.country || 'Global'} Recovered`,
+                data: Store.country
+                    ? this.#localeDataRecoveredValue[0] : this.#globalDataRecoveredValue[0],
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -71,14 +79,24 @@ export default class CovidDiagram extends Basic {
         };
 
         const optionsRecoveredByHundred = {
+            chart: {
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    speed: 300,
+                },
+            },
             colors: ['#0edd5d'],
             title: {
-                text: `${this.#country || 'Global'} Recovered/100K`,
+                text: `${Store.country || 'Global'} Recovered/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Recovered/100K`,
-                data: this.#dataRecoveredValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000)),
+                name: `${Store.country || 'Global'} Recovered/100K`,
+                data: Store.country
+                    ? this.#localeDataRecoveredValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                    : this.#globalDataRecoveredValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -88,12 +106,15 @@ export default class CovidDiagram extends Basic {
         const optionsDeathsByHundred = {
             colors: ['#dd0e45'],
             title: {
-                text: `${this.#country || 'Global'} Deaths/100K`,
+                text: `${Store.country || 'Global'} Deaths/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Deaths/100K`,
-                data: this.#dataDeathsValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000)),
+                name: `${Store.country || 'Global'} Deaths/100K`,
+                data: Store.country
+                    ? this.#localeDataDeathsValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                    : this.#globalDataDeathsValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -103,12 +124,15 @@ export default class CovidDiagram extends Basic {
         const optionsCasesByHundred = {
             colors: ['#8a85ff'],
             title: {
-                text: `${this.#country || 'Global'} Cases/100K`,
+                text: `${Store.country || 'Global'} Cases/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Cases/100K`,
-                data: this.#dataCasesValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000)),
+                name: `${Store.country || 'Global'} Cases/100K`,
+                data: Store.country
+                    ? this.#localeDataCasesValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                    : this.#globalDataCasesValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -118,14 +142,19 @@ export default class CovidDiagram extends Basic {
         const optionsRecoveredByHundredDaily = {
             colors: ['#0edd5d'],
             title: {
-                text: `${this.#country || 'Global'} Daily Recovered/100K`,
+                text: `${Store.country || 'Global'} Daily Recovered/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Recovered/100K`,
-                data: this.#dataRecoveredValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000))
-                    .map((el, index) => this.#dataRecoveredValue[0][index + 1]
-                        - this.#dataRecoveredValue[0][index]).filter((el) => el > 0),
+                name: `${Store.country || 'Global'} Daily Recovered/100K`,
+                data: Store.country
+                    ? this.#localeDataRecoveredValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                        .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
+                            - this.#localeDataRecoveredValue[0][index]).filter((el) => el > 0)
+                    : this.#globalDataRecoveredValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
+                            - this.#globalDataRecoveredValue[0][index]).filter((el) => el > 0),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -133,16 +162,28 @@ export default class CovidDiagram extends Basic {
         };
 
         const optionsDeathsByHundredDaily = {
+            chart: {
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    speed: 300,
+                },
+            },
             colors: ['#dd0e45'],
             title: {
-                text: `${this.#country || 'Global'} Daily Deaths/100K`,
+                text: `${Store.country || 'Global'} Daily Deaths/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Deaths/100K`,
-                data: this.#dataDeathsValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000))
-                    .map((el, index) => this.#dataDeathsValue[0][index + 1]
-                        - this.#dataDeathsValue[0][index]),
+                name: `${Store.country || 'Global'} Daily Deaths/100K`,
+                data: Store.country
+                    ? this.#localeDataDeathsValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                        .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
+                            - this.#localeDataDeathsValue[0][index])
+                    : this.#globalDataDeathsValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
+                            - this.#globalDataDeathsValue[0][index]),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -150,16 +191,26 @@ export default class CovidDiagram extends Basic {
         };
 
         const optionsCasesByHundredDaily = {
+            chart: {
+                animations: {
+                    enabled: false,
+                },
+            },
             colors: ['#8a85ff'],
             title: {
-                text: `${this.#country || 'Global'} Daily Cases/100K`,
+                text: `${Store.country || 'Global'} Daily Cases/100K`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Cases/100K`,
-                data: this.#dataCasesValue[0]
-                    .map((el) => Math.round((el / 7753933875) * 1000000))
-                    .map((el, index) => this.#dataCasesValue[0][index + 1]
-                        - this.#dataCasesValue[0][index]),
+                name: `${Store.country || 'Global'} Daily Cases/100K`,
+                data: Store.country
+                    ? this.#localeDataCasesValue[0]
+                        .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
+                        .map((el, index) => this.#localeDataCasesValue[0][index + 1]
+                            - this.#localeDataCasesValue[0][index])
+                    : this.#globalDataCasesValue[0]
+                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el, index) => this.#globalDataCasesValue[0][index + 1]
+                            - this.#globalDataCasesValue[0][index]),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -167,15 +218,25 @@ export default class CovidDiagram extends Basic {
         };
 
         const optionsRecoveredDaily = {
+            chart: {
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                },
+            },
             colors: ['#0edd5d'],
             title: {
-                text: `${this.#country || 'Global'} Daily Recovered`,
+                text: `${Store.country || 'Global'} Daily Recovered`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Recovered`,
-                data: this.#dataRecoveredValue[0]
-                    .map((element, index) => this.#dataRecoveredValue[0][index + 1]
-                        - this.#dataRecoveredValue[0][index]).filter((el) => el > 0),
+                name: `${Store.country || 'Global'} Daily Recovered`,
+                data: Store.country
+                    ? this.#localeDataRecoveredValue[0]
+                        .map((element, index) => this.#localeDataRecoveredValue[0][index + 1]
+                            - this.#localeDataRecoveredValue[0][index]).filter((el) => el > 0)
+                    : this.#globalDataRecoveredValue[0]
+                        .map((element, index) => this.#globalDataRecoveredValue[0][index + 1]
+                            - this.#globalDataRecoveredValue[0][index]).filter((el) => el > 0),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -185,13 +246,17 @@ export default class CovidDiagram extends Basic {
         const optionsDeathsDaily = {
             colors: ['#dd0e45'],
             title: {
-                text: `${this.#country || 'Global'} Daily Deaths`,
+                text: `${Store.country || 'Global'} Daily Deaths`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Deaths`,
-                data: this.#dataDeathsValue[0]
-                    .map((element, index) => this.#dataDeathsValue[0][index + 1]
-                        - this.#dataDeathsValue[0][index]),
+                name: `${Store.country || 'Global'} Daily Deaths`,
+                data: Store.country
+                    ? this.#localeDataDeathsValue[0]
+                        .map((element, index) => this.#localeDataDeathsValue[0][index + 1]
+                            - this.#localeDataDeathsValue[0][index])
+                    : this.#globalDataDeathsValue[0]
+                        .map((element, index) => this.#globalDataDeathsValue[0][index + 1]
+                            - this.#globalDataDeathsValue[0][index]),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -201,13 +266,17 @@ export default class CovidDiagram extends Basic {
         const optionsCasesDaily = {
             colors: ['#8a85ff'],
             title: {
-                text: `${this.#country || 'Global'} Daily Cases`,
+                text: `${Store.country || 'Global'} Daily Cases`,
             },
             series: [{
-                name: `${this.#country || 'Global'} Daily Cases`,
-                data: this.#dataCasesValue[0]
-                    .map((element, index) => this.#dataCasesValue[0][index + 1]
-                        - this.#dataCasesValue[0][index]),
+                name: `${Store.country || 'Global'} Daily Cases`,
+                data: Store.country
+                    ? this.#localeDataCasesValue[0]
+                        .map((element, index) => this.#localeDataCasesValue[0][index + 1]
+                            - this.#localeDataCasesValue[0][index])
+                    : this.#globalDataCasesValue[0]
+                        .map((element, index) => this.#globalDataCasesValue[0][index + 1]
+                            - this.#globalDataCasesValue[0][index]),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -251,7 +320,7 @@ export default class CovidDiagram extends Basic {
                         reset: false,
                         customIcons: [{
                             icon: `<img src=${LeftArrow} width="17">`,
-                            title: 'Prev category',
+                            title: 'Prev',
                             class: 'prev-category-icon',
                             click() {
                                 if (constants.diagramClickCounter === 0) {
@@ -264,7 +333,7 @@ export default class CovidDiagram extends Basic {
                         },
                         {
                             icon: `<img src=${RightArrow} width="17">`,
-                            title: 'Next category',
+                            title: 'Next',
                             class: 'next-category-icon',
                             click() {
                                 constants.diagramClickCounter += 1;
@@ -277,7 +346,7 @@ export default class CovidDiagram extends Basic {
                 },
             },
             title: {
-                text: 'Global Cases',
+                text: `${Store.country || 'Global'}  Cases`,
                 align: 'center',
                 margin: 10,
                 style: {
@@ -291,8 +360,9 @@ export default class CovidDiagram extends Basic {
                 enabled: false,
             },
             series: [{
-                name: 'cases',
-                data: this.#dataCasesValue[0],
+                name: `${Store.country || 'Global'}  Cases`,
+                data: Store.country
+                    ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0],
             }],
             xaxis: {
                 type: 'datetime',
@@ -302,17 +372,36 @@ export default class CovidDiagram extends Basic {
         chart.render();
     }
 
-    async getGlobalDataFromAPI() {
+    async getGlobalDataFromApi() {
         const response = await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=366');
         const data = await response.json();
-        this.#dataCasesValue.push(Object.values(data.cases));
-        this.#dataDeathsValue.push(Object.values(data.deaths));
-        this.#dataRecoveredValue.push(Object.values(data.recovered));
+        this.#globalDataCasesValue.push(Object.values(data.cases));
+        this.#globalDataDeathsValue.push(Object.values(data.deaths));
+        this.#globalDataRecoveredValue.push(Object.values(data.recovered));
         this.#dataDate.push(Object.keys(data.cases));
     }
 
-    // async getLocaleDataFromApi() {
-    //     const responce = await fetch('https://disease.sh/v3/covid-19/countries');
-    //     const data = await responce.json();
-    // }
+    async getLocaleDataFromApi() {
+        if (Store.country) {
+            const responce = await fetch(`https://disease.sh/v3/covid-19/historical/${Store.country}?lastdays=366`);
+            const data = await responce.json();
+            this.#localeDataCasesValue.push(Object.values(data.timeline.cases));
+            this.#localeDataDeathsValue.push(Object.values(data.timeline.deaths));
+            this.#localeDataRecoveredValue.push(Object.values(data.timeline.recovered));
+        }
+    }
+
+    async getLocaleDataPopulationFromApi() {
+        if (Store.country) {
+            const responce = await fetch(`https://disease.sh/v3/covid-19/countries/${Store.country}`);
+            const data = await responce.json();
+            this.#localeDataPopulation = data.population;
+            console.log(data.population);
+        }
+    }
+
+    rerenderDiagram() {
+        this.buildDiagram();
+        this.render();
+    }
 }
