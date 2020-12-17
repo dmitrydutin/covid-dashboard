@@ -22,7 +22,8 @@
         "class-methods-use-this": "off",
         "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
         "func-names": ["error", "never"],
-        "space-before-function-paren": "off"
+        "space-before-function-paren": "off",
+        "no-underscore-dangle":"warn"
     },
     "plugins": [
         "@babel"
