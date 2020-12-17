@@ -104,7 +104,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataRecoveredValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000)),
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -122,7 +122,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataDeathsValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000)),
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -140,7 +140,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataCasesValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000)),
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -160,7 +160,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
                             - this.#localeDataRecoveredValue[0][index]).filter((el) => el > 0)
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                             - this.#globalDataRecoveredValue[0][index]).filter((el) => el > 0),
             }],
@@ -189,7 +189,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
                             - this.#localeDataDeathsValue[0][index])
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
                             - this.#globalDataDeathsValue[0][index]),
             }],
@@ -216,7 +216,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataCasesValue[0][index + 1]
                             - this.#localeDataCasesValue[0][index])
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / 7753933875) * 1000000))
+                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                             - this.#globalDataCasesValue[0][index]),
             }],
