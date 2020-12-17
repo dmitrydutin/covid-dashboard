@@ -2,7 +2,6 @@ import './Header.scss';
 import { headerAPI } from '../../api/api';
 import Store from '../Store/store';
 import { countryInclude } from '../../../common/helpers';
-import Keyboard from './Keyboard/Keyboard';
 
 export default class Header {
     #searchDatalist = null;
@@ -15,12 +14,10 @@ export default class Header {
         const logo = this.#createLogo();
         const searchInput = this.#createSearchInput();
         const searchDatalist = this.#createSearchDatalist();
-        const keyboard = new Keyboard(searchInput, searchDatalist).render();
 
         header.append(logo);
         header.append(searchInput);
         header.append(searchDatalist);
-        header.append(keyboard);
 
         return header;
     }
@@ -42,19 +39,10 @@ export default class Header {
 
         searchInput.addEventListener('change', () => {
             this.#chooseCountryListener(searchInput.value);
-
-            console.log('change'); // ! DELETE
         });
 
         searchInput.addEventListener('search', () => {
             this.#chooseCountryListener(searchInput.value);
-
-            console.log('search'); // ! DELETE
-        });
-
-        // ! DELETE
-        searchInput.addEventListener('input', () => {
-            console.log('input');
         });
 
         return searchInput;
@@ -62,8 +50,6 @@ export default class Header {
 
     #chooseCountryListener(countryName) {
         if (countryInclude(this.#countries, countryName)) {
-            console.log('countryName', countryName); // ! DELETE
-
             Store.country = countryName;
             Store.notify();
         }
