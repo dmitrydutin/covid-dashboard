@@ -5,6 +5,7 @@ import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
 import constants from '../../../../common/constants';
 import Store from '../../Store/store';
+import { diagramAPI } from '../../../api/api';
 
 export default class CovidDiagram extends Basic {
     #globalDataCasesValue = [];
@@ -14,6 +15,7 @@ export default class CovidDiagram extends Basic {
     #localeDataDeathsValue = [];
     #localeDataRecoveredValue = [];
     #localeDataPopulation = null;
+    #covidDiagram = null;
     #dataDate = [];
 
     render() {
@@ -23,13 +25,19 @@ export default class CovidDiagram extends Basic {
         covidDiagram.classList.add('covid-diagram');
         covidDiagram.id = 'chart';
         covidDiagram.append(scaleButton);
-        this.buildDiagram();
+
+        this.#covidDiagram = covidDiagram;
+        this.fillDiagram();
+        Store.subscribe(this.fillDiagram.bind(this));
         return covidDiagram;
     }
 
+    fillDiagram() {
+        this.#covidDiagram.innerHTML = '';
+        this.buildDiagram();
+    }
+
     async buildDiagram() {
-        Store.subscribe(this.rerenderDiagram);
-        Store.country = 'America';
         await this.getGlobalDataFromApi();
         await this.getLocaleDataFromApi();
         await this.getLocaleDataPopulationFromApi();
@@ -298,7 +306,7 @@ export default class CovidDiagram extends Basic {
             optionsRecoveredDaily,
         ];
 
-        const chart = new ApexCharts(document.querySelector('#chart'), {
+        const chart = new ApexCharts(this.#covidDiagram, {
             colors: ['#8a85ff'],
             theme: {
                 mode: 'dark',
@@ -373,35 +381,43 @@ export default class CovidDiagram extends Basic {
     }
 
     async getGlobalDataFromApi() {
-        const response = await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=366');
-        const data = await response.json();
-        this.#globalDataCasesValue.push(Object.values(data.cases));
-        this.#globalDataDeathsValue.push(Object.values(data.deaths));
-        this.#globalDataRecoveredValue.push(Object.values(data.recovered));
-        this.#dataDate.push(Object.keys(data.cases));
+        const responce = await diagramAPI.getGlobalDataFromApi();
+
+        if (responce.status === 200) {
+            const { data } = responce;
+            this.#globalDataCasesValue.push(Object.values(data.cases));
+            this.#globalDataDeathsValue.push(Object.values(data.deaths));
+            this.#globalDataRecoveredValue.push(Object.values(data.recovered));
+            this.#dataDate.push(Object.keys(data.cases));
+        } else {
+            throw new Error('DiagramGlobalAPI error');
+        }
     }
 
     async getLocaleDataFromApi() {
         if (Store.country) {
-            const responce = await fetch(`https://disease.sh/v3/covid-19/historical/${Store.country}?lastdays=366`);
-            const data = await responce.json();
-            this.#localeDataCasesValue.push(Object.values(data.timeline.cases));
-            this.#localeDataDeathsValue.push(Object.values(data.timeline.deaths));
-            this.#localeDataRecoveredValue.push(Object.values(data.timeline.recovered));
+            const responce = await diagramAPI.getLocaleDataFromApi(Store.country);
+
+            if (responce.status === 200) {
+                const { data } = responce;
+                this.#localeDataCasesValue.push(Object.values(data.timeline.cases));
+                this.#localeDataDeathsValue.push(Object.values(data.timeline.deaths));
+                this.#localeDataRecoveredValue.push(Object.values(data.timeline.recovered));
+            } else {
+                throw new Error('DiagramLocaleAPI error');
+            }
         }
     }
 
     async getLocaleDataPopulationFromApi() {
         if (Store.country) {
-            const responce = await fetch(`https://disease.sh/v3/covid-19/countries/${Store.country}`);
-            const data = await responce.json();
-            this.#localeDataPopulation = data.population;
-            console.log(data.population);
+            const responce = await diagramAPI.getLocaleDataPopulationFromApi(Store.country);
+            if (responce.status === 200) {
+                const { data } = responce;
+                this.#localeDataPopulation = data.population;
+            } else {
+                throw new Error('DiagramPopulationAPI error');
+            }
         }
-    }
-
-    rerenderDiagram() {
-        this.buildDiagram();
-        this.render();
     }
 }
