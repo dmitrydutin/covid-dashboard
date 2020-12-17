@@ -33,6 +33,7 @@
         border: 1px solid $secondary-border-color;
         background: no-repeat 13px center/19px
             url('../../../assets/images/search.svg');
+        transition: background-color 0.1s linear;
 
         &:hover {
             background-color: $secondary-color;
