@@ -1,6 +1,12 @@
 @import '../../../../common/variables.scss';
 @import '../../../../common/mixins.scss';
 
+
+
+.covid-map-container{
+    height:650px;
+    width:100%;
+}
 .covid-map {
     grid-area: map;
     position: relative;
@@ -11,5 +17,32 @@
 
     &.scale {
         @include block-scale;
+    }
+}
+
+#mapid{
+    height:600px;
+    width:100%;
+}
+
+.button-container{
+    display:flex;
+    flex-direction: row;
+    .map-button{
+        width:100px;
+        height: 30px;
+        margin: 0 10px 10px ;
+            background-color:$map-button-background-color;
+            color:#ffff;
+            outline:none;
+            border: 1px solid $map-button-background-color;
+            border-bottom: 3px solid $map-button-background-color;
+            cursor:pointer;
+
+    }
+
+    .active-button{
+        border-bottom: 3px solid #ffff;
+        background-color:$map-button-background-color-active;
     }
 }
