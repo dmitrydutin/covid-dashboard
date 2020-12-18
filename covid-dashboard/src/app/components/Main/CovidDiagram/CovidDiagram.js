@@ -397,10 +397,12 @@ export default class CovidDiagram extends Basic {
 
     async getLocaleDataFromApi() {
         if (Store.country) {
-            console.log(Store.country);
             const responce = await diagramAPI.getLocaleDataFromApi(Store.country);
             if (responce.status === 200) {
                 const { data } = responce;
+                this.#localeDataCasesValue = [];
+                this.#localeDataDeathsValue = [];
+                this.#localeDataRecoveredValue = [];
                 this.#localeDataCasesValue.push(Object.values(data.timeline.cases));
                 this.#localeDataDeathsValue.push(Object.values(data.timeline.deaths));
                 this.#localeDataRecoveredValue.push(Object.values(data.timeline.recovered));
@@ -415,6 +417,7 @@ export default class CovidDiagram extends Basic {
             const responce = await diagramAPI.getLocaleDataPopulationFromApi(Store.country);
             if (responce.status === 200) {
                 const { data } = responce;
+                this.#localeDataPopulation = null;
                 this.#localeDataPopulation = data.population;
             } else {
                 throw new Error('DiagramPopulationAPI error');
