@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "leaflet": "^1.7.1",
+    "apexcharts": "^3.23.0",
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {

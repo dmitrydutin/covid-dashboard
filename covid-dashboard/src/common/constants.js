@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+const DIAGRAM_WORD_POPULATION = 7753933875;
 const ACCESS_TOKEN = 'sk.eyJ1IjoiYXNiYXJuIiwiYSI6ImNraW16YjR6czAzeXoyeW95cHUya3djdTIifQ.nhucE6in6G6-Np4PI-CyFA';
 
-export { ACCESS_TOKEN };
+export { ACCESS_TOKEN, DIAGRAM_WORD_POPULATION };
