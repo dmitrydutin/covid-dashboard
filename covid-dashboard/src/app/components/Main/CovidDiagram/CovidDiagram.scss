@@ -5,11 +5,19 @@
     grid-area: diagram;
     position: relative;
 
+    margin: 5px;
     border-radius: 5px;
     border: 1px solid $primary-border-color;
     background-color: $primary-color;
 
+    z-index: 990;
+
     &.scale {
         @include block-scale;
     }
+}
+
+.prev-category-icon,
+.next-category-icon {
+    margin: 10px 7px 0;
 }
