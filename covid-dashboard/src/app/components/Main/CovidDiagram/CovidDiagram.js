@@ -3,7 +3,7 @@ import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
-import { diagramWorldPopulation } from '../../../../common/constants';
+import { DIAGRAM_WORD_POPULATION } from '../../../../common/constants';
 import Store from '../../Store/store';
 import { diagramAPI } from '../../../api/api';
 
@@ -105,7 +105,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataRecoveredValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -123,7 +123,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataDeathsValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -141,7 +141,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataCasesValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -161,7 +161,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
                             - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                         .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                             - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el)),
             }],
@@ -190,7 +190,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
                             - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                         .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
                             - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el)),
             }],
@@ -217,7 +217,7 @@ export default class CovidDiagram extends Basic {
                         .map((el, index) => this.#localeDataCasesValue[0][index + 1]
                             - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
+                        .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                         .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                             - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el)),
             }],
