@@ -9,8 +9,9 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import Basic from '../Basic/Basic';
 import { mapAPI } from '../../../api/api';
-import { accessToken } from '../../../../common/constants';
+import { ACCESS_TOKEN } from '../../../../common/constants';
 
+// eslint-disable-next-line no-underscore-dangle
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
 
 LeafletMap.Icon.Default.mergeOptions({
@@ -125,13 +126,13 @@ export default class CovidMap extends Basic {
             zoom: 15,
             maxZoom: 20,
             minZoom: 2,
-            accessToken,
+            ACCESS_TOKEN,
             continuousWorld: false,
         }).setView([0, 50], 2);
 
         const CartoDBDarkMatter = LeafletMap.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             subdomains: 'abcd',
-            accessToken,
+            ACCESS_TOKEN,
         });
 
         CartoDBDarkMatter.addTo(mymap);

@@ -17,13 +17,17 @@
         @include header-logo;
     }
 
-    &__search-input {
+    &__search-form {
+        position: relative;
         margin-left: 30px;
-        padding: 12px 14px 12px 45px;
 
         flex-grow: 1;
         max-width: 320px;
-        min-width: 150px;
+    }
+
+    &__search-input {
+        padding: 12px 14px 12px 45px;
+        width: 100%;
 
         color: $primary-text-color;
         @include h2;

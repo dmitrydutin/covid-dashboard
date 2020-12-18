@@ -3,7 +3,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 
 const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'production';
 
@@ -48,14 +47,6 @@ module.exports = {
             },
         }),
         new ESLintPlugin(),
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, 'src', 'assets', 'sounds'),
-                    to: path.resolve(__dirname, 'dist', 'sounds'),
-                },
-            ],
-        }),
     ],
     devtool: isProduction ? false : 'source-map',
     devServer: {
