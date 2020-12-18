@@ -3,7 +3,7 @@ import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
-import constants from '../../../../common/constants';
+import { diagramWorldPopulation } from '../../../../common/constants';
 import Store from '../../Store/store';
 import { diagramAPI } from '../../../api/api';
 
@@ -41,6 +41,7 @@ export default class CovidDiagram extends Basic {
         await this.getGlobalDataFromApi();
         await this.getLocaleDataFromApi();
         await this.getLocaleDataPopulationFromApi();
+        let diagramClickCounter = 0;
         const optionsCases = {
             colors: ['#8a85ff'],
             title: {
@@ -104,7 +105,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataRecoveredValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -122,7 +123,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataDeathsValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -140,7 +141,7 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataCasesValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000)),
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -158,11 +159,11 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataRecoveredValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                         .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
-                            - this.#localeDataRecoveredValue[0][index]).filter((el) => el > 0)
+                            - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataRecoveredValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
-                            - this.#globalDataRecoveredValue[0][index]).filter((el) => el > 0),
+                            - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -187,11 +188,11 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataDeathsValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                         .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
-                            - this.#localeDataDeathsValue[0][index])
+                            - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataDeathsValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
-                            - this.#globalDataDeathsValue[0][index]),
+                            - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -214,11 +215,11 @@ export default class CovidDiagram extends Basic {
                     ? this.#localeDataCasesValue[0]
                         .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                         .map((el, index) => this.#localeDataCasesValue[0][index + 1]
-                            - this.#localeDataCasesValue[0][index])
+                            - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataCasesValue[0]
-                        .map((el) => Math.round((el / constants.worldPopulation) * 1000000))
+                        .map((el) => Math.round((el / diagramWorldPopulation) * 1000000))
                         .map((el, index) => this.#globalDataCasesValue[0][index + 1]
-                            - this.#globalDataCasesValue[0][index]),
+                            - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -241,10 +242,10 @@ export default class CovidDiagram extends Basic {
                 data: Store.country
                     ? this.#localeDataRecoveredValue[0]
                         .map((element, index) => this.#localeDataRecoveredValue[0][index + 1]
-                            - this.#localeDataRecoveredValue[0][index]).filter((el) => el > 0)
+                            - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataRecoveredValue[0]
                         .map((element, index) => this.#globalDataRecoveredValue[0][index + 1]
-                            - this.#globalDataRecoveredValue[0][index]).filter((el) => el > 0),
+                            - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -261,10 +262,10 @@ export default class CovidDiagram extends Basic {
                 data: Store.country
                     ? this.#localeDataDeathsValue[0]
                         .map((element, index) => this.#localeDataDeathsValue[0][index + 1]
-                            - this.#localeDataDeathsValue[0][index])
+                            - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataDeathsValue[0]
                         .map((element, index) => this.#globalDataDeathsValue[0][index + 1]
-                            - this.#globalDataDeathsValue[0][index]),
+                            - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -281,10 +282,10 @@ export default class CovidDiagram extends Basic {
                 data: Store.country
                     ? this.#localeDataCasesValue[0]
                         .map((element, index) => this.#localeDataCasesValue[0][index + 1]
-                            - this.#localeDataCasesValue[0][index])
+                            - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
                     : this.#globalDataCasesValue[0]
                         .map((element, index) => this.#globalDataCasesValue[0][index + 1]
-                            - this.#globalDataCasesValue[0][index]),
+                            - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el)),
             }],
             xaxis: {
                 categories: this.#dataDate[0],
@@ -331,12 +332,12 @@ export default class CovidDiagram extends Basic {
                             title: 'Prev',
                             class: 'prev-category-icon',
                             click() {
-                                if (constants.diagramClickCounter === 0) {
-                                    constants.diagramClickCounter += 12;
+                                if (diagramClickCounter === 0) {
+                                    diagramClickCounter += 12;
                                 }
-                                constants.diagramClickCounter -= 1;
-                                chart.updateOptions(options[constants.diagramClickCounter]
-                                    || options[constants.diagramClickCounter % 12]);
+                                diagramClickCounter -= 1;
+                                chart.updateOptions(options[diagramClickCounter]
+                                    || options[diagramClickCounter % 12]);
                             },
                         },
                         {
@@ -344,9 +345,9 @@ export default class CovidDiagram extends Basic {
                             title: 'Next',
                             class: 'next-category-icon',
                             click() {
-                                constants.diagramClickCounter += 1;
-                                chart.updateOptions(options[constants.diagramClickCounter]
-                                    || options[constants.diagramClickCounter % 12]);
+                                diagramClickCounter += 1;
+                                chart.updateOptions(options[diagramClickCounter]
+                                    || options[diagramClickCounter % 12]);
                             },
                         },
                         ],
@@ -396,8 +397,8 @@ export default class CovidDiagram extends Basic {
 
     async getLocaleDataFromApi() {
         if (Store.country) {
+            console.log(Store.country);
             const responce = await diagramAPI.getLocaleDataFromApi(Store.country);
-
             if (responce.status === 200) {
                 const { data } = responce;
                 this.#localeDataCasesValue.push(Object.values(data.timeline.cases));

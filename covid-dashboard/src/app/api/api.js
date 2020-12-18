@@ -1,7 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 
-export const diagramAPI = {
+const diagramAPI = {
     getGlobalDataFromApi() {
         return axios.get('https://disease.sh/v3/covid-19/historical/all?lastdays=366');
     },
@@ -25,4 +24,4 @@ const mapAPI = {
     },
 };
 
-export { headerAPI, mapAPI };
+export { headerAPI, mapAPI, diagramAPI };
