@@ -167,7 +167,6 @@ export default class CovidMap extends Basic {
             mymap.on('click', (e) => {
                 this.#fetchCountry(e.latlng.lat, e.latlng.lng)
                     .then(() => {
-                        console.log(this.country);
                         this.#chooseCountryListener(this.country);
                     });
             });
@@ -257,7 +256,6 @@ export default class CovidMap extends Basic {
             .findIndex((elem) => elem === country) !== -1) {
             Store.country = country;
             Store.notify();
-            console.log(Store);
         }
     }
 
@@ -266,14 +264,12 @@ export default class CovidMap extends Basic {
         this.drawCircles(mymap, this.data, name, circleColors);
         Store.criterion = CRITERIONS.find((elem) => elem.value === name);
         Store.notifyCriterion();
-        console.log(Store);
     }
 
     updateCriterion(criterion) {
         if (this.data.length) {
             this.mapMarkers.clearLayers();
             this.drawCircles(this.mymap, this.data, criterion.value, criterion.color);
-            console.log(Store);
         }
     }
 }
