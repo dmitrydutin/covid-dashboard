@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars  */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-underscore-dangle */
 import './CovidMap.scss';
 import 'leaflet/dist/leaflet.css';
 
@@ -9,6 +11,7 @@ import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import Swiper from 'swiper/bundle';
 import 'swiper/swiper-bundle.css';
+import statesData from './custom.geo1.json';
 import Store from '../../Store/store';
 import Basic from '../Basic/Basic';
 import { mapAPI } from '../../../api/api';
@@ -16,7 +19,6 @@ import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
 import LeftArrow from '../../../../assets/images/slider-arrow-left.png';
 import RightArrow from '../../../../assets/images/slider-arrow-right.png';
 
-// eslint-disable-next-line no-underscore-dangle
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
 
 LeafletMap.Icon.Default.mergeOptions({
@@ -94,7 +96,10 @@ export default class CovidMap extends Basic {
                 CRITERIONS[swiper.realIndex].color,
             );
         });
-
+        Store.subscribeCriterion((criterion) => {
+            const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
+            swiper.slideTo(index + 1, 1500);
+        });
         return buttonContainer;
     }
 
@@ -104,22 +109,16 @@ export default class CovidMap extends Basic {
         )[criterion];
 
         data.forEach((element) => {
-            const circle = LeafletMap.circle([element.countryInfo.lat, element.countryInfo.long],
+            const circle = LeafletMap.circle(
+                [element.countryInfo.lat, element.countryInfo.long],
                 {
                     color,
                     fillColor: color,
                     fillOpacity: 1,
                     radius: 250000 * (element[criterion] / maxCases),
-                });
 
-            circle.bindPopup(this.renderPopup(element, criterion));
-            circle.on('mouseover', function () {
-                this.openPopup();
-            });
-            circle.on('mouseout', function () {
-                this.closePopup();
-            });
-
+                },
+            );
             this.mapMarkers.addLayer(circle);
         });
 
@@ -174,6 +173,141 @@ export default class CovidMap extends Basic {
             Store.subscribeCriterion(
                 this.updateCriterion.bind(this),
             );
+        }).then(() => {
+            const info = LeafletMap.control();
+            const { data } = this;
+            info.onAdd = function (map) {
+                this._div = LeafletMap.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+
+            info.update = function (props) {
+                if (props) {
+                    let str;
+                    switch (props.name) {
+                        case 'United States':
+                            str = 'USA';
+                            break;
+                        case 'United Kingdom':
+                            str = 'UK';
+                            break;
+                        case 'South Korea':
+                            str = 'S. Korea';
+                            break;
+                        default:
+                            str = props.name;
+                            break;
+                    }
+                    const countryIndex = data.map((element) => element.country)
+                        .findIndex((elem) => elem === str);
+                    if (countryIndex === -1) return;
+                    const country = data[countryIndex];
+                    this._div.innerHTML = `<h4>${Store.criterion.name}</h4>${props
+                        ? `<img src="${country.countryInfo.flag}"><b>${props.name}</b><br />${country[Store.criterion.value]} people`
+                        : 'Hover over a country'}`;
+                }
+            };
+
+            info.addTo(mymap);
+            function createLegend() {
+                const legend = LeafletMap.control({ position: 'bottomright' });
+
+                legend.onAdd = function () {
+                    const div = LeafletMap.DomUtil.create('div', 'info legend');
+                    const grades = [0, 25, 50, 75, 100];
+                    const labels = [];
+                    let from; let
+                        to;
+                    labels.push(
+                        'Legend',
+                    );
+                    for (let i = 0; i < grades.length; i++) {
+                        from = grades[i];
+                        to = grades[i + 1];
+                        let rad;
+                        switch (from) {
+                            case 0:
+                                rad = 5;
+                                break;
+                            case 25:
+                                rad = 7.5;
+                                break;
+                            case 50:
+                                rad = 15;
+                                break;
+                            case 75:
+                                rad = 22.5;
+                                break;
+                            case 100:
+                                rad = 30;
+                                break;
+                            default:
+                                break;
+                        }
+                        labels.push(
+                            `<div class="legend-criterion" >
+                            <i style="width:${rad}px;height:${rad}px;background:${Store.criterion.color}"></i> ${from}%
+                            </div>`,
+                        );
+                    }
+                    div.innerHTML = labels.join('<br>');
+                    return div;
+                };
+                legend.addTo(mymap);
+                Store.subscribeCriterion(() => {
+                    legend.remove();
+                });
+            }
+            function style() {
+                return {
+                    weight: 3,
+                    opacity: 1,
+                    color: 'black',
+                    fillColor: 'rgb(0, 0, 0)',
+                };
+            }
+            function highlightFeature(e) {
+                const layer = e.target;
+
+                layer.setStyle({
+                    weight: 3,
+                    color: '#666',
+                    fillOpacity: 0.5,
+                });
+
+                if (!LeafletMap.Browser.ie
+                    && !LeafletMap.Browser.opera
+                    && !LeafletMap.Browser.edge) {
+                    layer.bringToFront();
+                }
+
+                info.update(layer.feature.properties);
+            }
+
+            let geojson;
+
+            function resetHighlight(e) {
+                geojson.resetStyle(e.target);
+                info.update();
+            }
+
+            function onEachFeature(feature, layer) {
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                });
+            }
+
+            geojson = LeafletMap.geoJson(statesData, {
+                style,
+                onEachFeature,
+            }).addTo(mymap);
+
+            createLegend();
+            Store.subscribeCriterion(() => {
+                createLegend();
+            });
         });
 
         return covidMapContainer;

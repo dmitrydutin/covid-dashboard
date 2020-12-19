@@ -17,6 +17,7 @@
     "apexcharts": "^3.23.0",
     "axios": "^0.21.0",
     "cors": "^2.8.5",
+    "data.js": "^0.12.11",
     "leaflet": "^1.7.1",
     "normalize.css": "^8.0.1",
     "swiper": "^6.4.1"
