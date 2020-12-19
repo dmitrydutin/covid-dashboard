@@ -3,7 +3,7 @@ import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
-import { DIAGRAM_WORD_POPULATION } from '../../../../common/constants';
+import { DIAGRAM_WORD_POPULATION, CRITERIONS } from '../../../../common/constants';
 import Store from '../../Store/store';
 import { diagramAPI } from '../../../api/api';
 
@@ -27,6 +27,7 @@ export default class CovidDiagram extends Basic {
 
         this.fillDiagram();
         Store.subscribe(this.fillDiagram.bind(this));
+        Store.subscribeCriterion(this.fillDiagram.bind(this));
 
         covidDiagram.append(this.#covidDiagramContainer);
         covidDiagram.append(scaleButton);
@@ -39,11 +40,7 @@ export default class CovidDiagram extends Basic {
         this.buildDiagram();
     }
 
-    createOptions(colorsArg, titleTextArg, dataOptions, animationsArg = {
-        enabled: true,
-        easing: 'linear',
-        speed: 300,
-    }) {
+    createOptions(colorsArg, titleTextArg, dataOptions, animationsArg = { enabled: false }) {
         return {
             chart: {
                 animations: animationsArg,
@@ -63,7 +60,7 @@ export default class CovidDiagram extends Basic {
     }
 
     async buildDiagram() {
-        console.log(Store.country);
+        // eslint-disable-next-line no-use-before-define
         await this.getGlobalDataFromApi();
         await this.getLocaleDataFromApi();
         await this.getLocaleDataPopulationFromApi();
@@ -76,6 +73,27 @@ export default class CovidDiagram extends Basic {
                 ? this.#localeDataDeathsValue[0] : this.#globalDataDeathsValue[0]),
             this.createOptions(['#0edd5d'], 'Recovered', Store.country
                 ? this.#localeDataRecoveredValue[0] : this.#globalDataRecoveredValue[0]),
+            this.createOptions(['#8a85ff'], 'Daily Cases', Store.country
+                ? this.#localeDataCasesValue[0]
+                    .map((el, index) => this.#localeDataCasesValue[0][index + 1]
+                        - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
+                : this.#globalDataCasesValue[0]
+                    .map((el, index) => this.#globalDataCasesValue[0][index + 1]
+                        - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
+            this.createOptions(['#dd0e45'], 'Daily Deaths', Store.country
+                ? this.#localeDataDeathsValue[0]
+                    .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
+                        - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
+                : this.#globalDataDeathsValue[0]
+                    .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
+                        - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el))),
+            this.createOptions(['#0edd5d'], 'Daily Recovered', Store.country
+                ? this.#localeDataRecoveredValue[0]
+                    .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
+                        - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
+                : this.#globalDataRecoveredValue[0]
+                    .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
+                        - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
             this.createOptions(['#8a85ff'], 'Cases/100K', Store.country
                 ? this.#localeDataRecoveredValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
@@ -99,9 +117,7 @@ export default class CovidDiagram extends Basic {
                 : this.#globalDataCasesValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                     .map((el, index) => this.#globalDataCasesValue[0][index + 1]
-                        - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el)), {
-                enabled: false,
-            }),
+                        - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
             this.createOptions(['#dd0e45'], 'Daily Deaths/100K', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
@@ -120,29 +136,6 @@ export default class CovidDiagram extends Basic {
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                     .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                         - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#8a85ff'], 'Daily Cases', Store.country
-                ? this.#localeDataCasesValue[0]
-                    .map((el, index) => this.#localeDataCasesValue[0][index + 1]
-                        - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
-                : this.#globalDataCasesValue[0]
-                    .map((el, index) => this.#globalDataCasesValue[0][index + 1]
-                        - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#dd0e45'], 'Daily Deaths', Store.country
-                ? this.#localeDataDeathsValue[0]
-                    .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
-                        - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
-                : this.#globalDataDeathsValue[0]
-                    .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
-                        - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#0edd5d'], 'Daily Recovered', Store.country
-                ? this.#localeDataRecoveredValue[0]
-                    .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
-                        - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
-                : this.#globalDataRecoveredValue[0]
-                    .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
-                        - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el)), {
-                enabled: false,
-            }),
         ];
 
         const chart = new ApexCharts(this.#covidDiagramContainer, {
@@ -174,8 +167,10 @@ export default class CovidDiagram extends Basic {
                                     diagramClickCounter += 12;
                                 }
                                 diagramClickCounter -= 1;
-                                chart.updateOptions(options[diagramClickCounter]
-                                    || options[diagramClickCounter % 12]);
+                                Store.criterion = CRITERIONS[options
+                                    .indexOf(options[diagramClickCounter])];
+                                Store.notifyCriterion();
+                                chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         {
@@ -183,9 +178,14 @@ export default class CovidDiagram extends Basic {
                             title: 'Next',
                             class: 'next-category-icon',
                             click() {
+                                if (diagramClickCounter === 11) {
+                                    diagramClickCounter -= 12;
+                                }
                                 diagramClickCounter += 1;
-                                chart.updateOptions(options[diagramClickCounter]
-                                    || options[diagramClickCounter % 12]);
+                                Store.criterion = CRITERIONS[options
+                                    .indexOf(options[diagramClickCounter])];
+                                Store.notifyCriterion();
+                                chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         ],
@@ -217,6 +217,10 @@ export default class CovidDiagram extends Basic {
             },
         });
         chart.render();
+        if (Store.criterion.name !== 'Total number of cases') {
+            chart.updateOptions(options[CRITERIONS.indexOf(Store.criterion)]);
+            diagramClickCounter = CRITERIONS.indexOf(Store.criterion);
+        }
     }
 
     async getGlobalDataFromApi() {
