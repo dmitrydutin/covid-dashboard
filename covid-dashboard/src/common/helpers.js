@@ -2,8 +2,8 @@
 function countryInclude(countries, countryName) {
     return (
         countries.findIndex((country) => {
-            const firstCountry = country.country.toLowerCase();
-            const secondCountry = countryName.toLowerCase();
+            const firstCountry = country.country;
+            const secondCountry = countryName;
             return firstCountry === secondCountry;
         }) !== -1
     );

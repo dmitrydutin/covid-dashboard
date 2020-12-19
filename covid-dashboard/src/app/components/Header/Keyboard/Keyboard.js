@@ -67,7 +67,9 @@ export default class Keyboard {
         key.textContent = keyConfig[this.properties.lang][this.#getType()];
 
         key.addEventListener('click', () => {
-            this.#setKeyEvent(keyConfig);
+            setTimeout(() => {
+                this.#setKeyEvent(keyConfig);
+            }, 100);
         });
 
         return key;
@@ -114,17 +116,19 @@ export default class Keyboard {
                     this.elements.textBlock.value = this.properties.value;
                     this.#setCursorPosition(-1);
                 }
+
+                this.elements.textBlock.dispatchEvent(new Event('input'));
                 break;
             case 'tab':
                 this.#setText('    ');
+                this.elements.textBlock.dispatchEvent(new Event('input'));
                 break;
             case 'caps':
                 this.properties.capsLock = !this.properties.capsLock;
                 this.#fillKeyboard();
                 break;
             case 'enter':
-                // this.#setText('\n');
-                console.log('enter');
+                this.elements.textBlock.dispatchEvent(new Event('search'));
                 break;
             case 'shift':
                 this.properties.shift = !this.properties.shift;
@@ -169,6 +173,8 @@ export default class Keyboard {
         );
         this.properties.value = this.elements.textBlock.value;
         this.properties.cursorPosition = this.elements.textBlock.selectionStart;
+
+        this.elements.textBlock.dispatchEvent(new Event('input'));
     }
 
     #isTextRange() {

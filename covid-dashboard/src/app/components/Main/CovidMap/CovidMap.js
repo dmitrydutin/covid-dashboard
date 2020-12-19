@@ -1,15 +1,20 @@
+/* eslint-disable no-unused-vars  */
+/* eslint-disable no-param-reassign */
 import './CovidMap.scss';
-
 import 'leaflet/dist/leaflet.css';
 
 import LeafletMap from 'leaflet';
 import marker from 'leaflet/dist/images/marker-icon.png';
 import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
+import Swiper from 'swiper/bundle';
+import 'swiper/swiper-bundle.css';
+import Store from '../../Store/store';
 import Basic from '../Basic/Basic';
 import { mapAPI } from '../../../api/api';
-import { ACCESS_TOKEN } from '../../../../common/constants';
+import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
+import LeftArrow from '../../../../assets/images/slider-arrow-left.png';
+import RightArrow from '../../../../assets/images/slider-arrow-right.png';
 
 // eslint-disable-next-line no-underscore-dangle
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
@@ -25,26 +30,8 @@ export default class CovidMap extends Basic {
         super();
         this.mapMarkers = LeafletMap.layerGroup();
         this.data = [];
-    }
-
-    renderButton(mymap, data, name, circleColors, active) {
-        const button = document.createElement('button');
-        button.classList.add('map-button');
-        if (active) button.classList.add('active-button');
-        button.textContent = `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-
-        button.addEventListener('click', () => {
-            this.mapMarkers.clearLayers();
-
-            [...document.getElementsByClassName('map-button')].forEach((elem) => {
-                elem.classList.remove('active-button');
-            });
-
-            button.classList.add('active-button');
-            this.drawCircles(mymap, data, name, circleColors);
-        });
-
-        return button;
+        this.mymap = null;
+        this.country = undefined;
     }
 
     renderPopup(elem, criterion) {
@@ -65,17 +52,48 @@ export default class CovidMap extends Basic {
         return countryContainer;
     }
 
-    renderButtons(mymap, data) {
+    renderButtons(mymap) {
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('button-container');
+        buttonContainer.classList.add('swiper-container');
 
-        const buttonCases = this.renderButton(mymap, data, 'cases', '#BC0000', true);
-        const buttonDeaths = this.renderButton(mymap, data, 'deaths', '#ffff0a');
-        const buttonRecovered = this.renderButton(mymap, data, 'recovered', '#00bc00');
+        const buttonPrev = document.createElement('img');
+        buttonPrev.classList.add('swiper-button-prev');
+        buttonPrev.classList.add('button-prev');
+        buttonPrev.src = LeftArrow;
+        const buttonNext = document.createElement('img');
+        buttonNext.classList.add('swiper-button-next');
+        buttonNext.classList.add('button-next');
+        buttonNext.src = RightArrow;
+        const swiperWrapper = document.createElement('div');
+        swiperWrapper.classList.add('swiper-wrapper');
 
-        buttonContainer.append(buttonDeaths);
-        buttonContainer.append(buttonCases);
-        buttonContainer.append(buttonRecovered);
+        CRITERIONS.forEach((elem) => {
+            const swiperSlide = document.createElement('div');
+            swiperSlide.classList.add('swiper-slide');
+            swiperSlide.textContent = elem.name;
+            swiperWrapper.append(swiperSlide);
+        });
+
+        buttonContainer.append(swiperWrapper);
+        buttonContainer.append(buttonPrev);
+        buttonContainer.append(buttonNext);
+        document.body.append(buttonContainer);
+        const swiper = new Swiper(buttonContainer, {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: false,
+            navigation: {
+                nextEl: buttonNext,
+                prevEl: buttonPrev,
+            },
+        });
+        swiper.on('transitionEnd', () => {
+            this.#changeCriterion(
+                mymap, CRITERIONS[swiper.realIndex].value,
+                CRITERIONS[swiper.realIndex].color,
+            );
+        });
 
         return buttonContainer;
     }
@@ -127,7 +145,6 @@ export default class CovidMap extends Basic {
             maxZoom: 20,
             minZoom: 2,
             ACCESS_TOKEN,
-            continuousWorld: false,
         }).setView([0, 50], 2);
 
         const CartoDBDarkMatter = LeafletMap.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -137,12 +154,27 @@ export default class CovidMap extends Basic {
 
         CartoDBDarkMatter.addTo(mymap);
 
-        setTimeout(() => { mymap.invalidateSize(); }, 500);
+        setInterval(() => {
+            mymap.invalidateSize();
+        }, 500);
 
         this.#fetchData().then(() => {
-            this.#fetchData();
+            this.#fetchData().then(() => {
+            });
             covidMapContainer.append(this.renderButtons(mymap, this.data));
             this.drawCircles(mymap, this.data, 'cases', '#BC0000');
+        }).then(() => {
+            mymap.on('click', (e) => {
+                this.#fetchCountry(e.latlng.lat, e.latlng.lng)
+                    .then(() => {
+                        console.log(this.country);
+                        this.#chooseCountryListener(this.country);
+                    });
+            });
+            this.mymap = mymap;
+            Store.subscribeCriterion(
+                this.updateCriterion.bind(this),
+            );
         });
 
         return covidMapContainer;
@@ -153,8 +185,95 @@ export default class CovidMap extends Basic {
 
         if (response.status === 200) {
             this.data = response.data;
+            this.data.forEach((element) => {
+                element.casesPer100K = Number.isFinite(
+                    Math.round((element.cases * 100000)
+                        / element.population),
+                ) ? Math.round((element.cases * 100000)
+                    / element.population) : 100;
+
+                element.deathsPer100K = Number.isFinite(
+                    Math.round((element.deaths * 100000)
+                        / element.population),
+                ) ? Math.round((element.deaths * 100000)
+                    / element.population) : 100;
+
+                element.recoveredPer100K = Number.isFinite(
+                    Math.round((element.recovered * 100000)
+                        / element.population),
+                ) ? Math.round((element.recovered * 100000)
+                    / (element.population)) : 100;
+
+                element.todayCasesPer100K = Number.isFinite(
+                    Math.round((element.todayCases * 100000)
+                        / element.population),
+                ) ? Math.round((element.todayCases * 100000)
+                    / element.population) : 1;
+
+                element.todayDeathsPer100K = Number.isFinite(
+                    Math.round((element.todayDeaths * 100000)
+                        / element.population),
+                ) ? Math.round((element.todayDeaths * 100000)
+                    / element.population) : 1;
+
+                element.todayRecoveredPer100K = Number.isFinite(
+                    Math.round((element.todayRecovered * 100000)
+                        / element.population),
+                ) ? Math.round((element.todayRecovered * 100000)
+                    / element.population) : 1;
+            });
         } else {
             throw new Error('COVID-19 API FETCH ERROR');
+        }
+    }
+
+    async #fetchCountry(lat, lng) {
+        const response = await mapAPI.getCountryName(lat, lng);
+
+        if (response.status === 200) {
+            this.country = response.data.countryName;
+        } else {
+            throw new Error('COVID-19 API FETCH ERROR');
+        }
+    }
+
+    #chooseCountryListener(countryName) {
+        let country;
+        switch (countryName) {
+            case 'United States':
+                country = 'USA';
+                break;
+            case 'United Kingdom':
+                country = 'UK';
+                break;
+            case 'South Korea':
+                country = 'S. Korea';
+                break;
+            default:
+                country = countryName;
+                break;
+        }
+        if (this.data.map((element) => element.country)
+            .findIndex((elem) => elem === country) !== -1) {
+            Store.country = country;
+            Store.notify();
+            console.log(Store);
+        }
+    }
+
+    #changeCriterion(mymap, name, circleColors) {
+        this.mapMarkers.clearLayers();
+        this.drawCircles(mymap, this.data, name, circleColors);
+        Store.criterion = CRITERIONS.find((elem) => elem.value === name);
+        Store.notifyCriterion();
+        console.log(Store);
+    }
+
+    updateCriterion(criterion) {
+        if (this.data.length) {
+            this.mapMarkers.clearLayers();
+            this.drawCircles(this.mymap, this.data, criterion.value, criterion.color);
+            console.log(Store);
         }
     }
 }

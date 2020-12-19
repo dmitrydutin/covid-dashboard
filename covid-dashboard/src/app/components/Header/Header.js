@@ -48,12 +48,6 @@ export default class Header {
         searchInput.type = 'search';
         searchInput.placeholder = 'Search country...';
 
-        // searchInput.addEventListener('change', () => {
-        //     this.#chooseCountryListener(searchInput.value);
-
-        //     console.log('change');
-        // });
-
         searchInput.addEventListener('search', () => {
             this.#chooseCountryListener(searchInput.value);
         });
@@ -62,13 +56,9 @@ export default class Header {
     }
 
     #chooseCountryListener(countryName) {
-        console.log('countryName', countryName);
-
         if (countryInclude(this.#countries, countryName)) {
             Store.country = countryName;
             Store.notify();
-
-            console.log('Store was changed');
         }
     }
 

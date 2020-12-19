@@ -1,3 +1,5 @@
+@import '../../../../common/variables.scss';
+
 .keyboard {
     width: 910px;
     padding: 8px;
@@ -14,10 +16,9 @@
     user-select: none;
     border-radius: 10px;
     transition: bottom 0.4s;
-    background-color: #595b5f; // ! EDIT
-    background: linear-gradient(#515558, #595b5f); // ! EDIT
-    box-shadow: 1px 7.25px 10.3px 0 rgba(0, 0, 0, 0.4),
-        0 3.2px 6.4px 0 rgba(0, 0, 0, 0.4); // ! EDIT
+    background-color: $keyboard-background-color;
+    background: $keyboard-background-linear-gradient;
+    box-shadow: $keyboard-box-shadow;
 
     &--hidden {
         bottom: -100%;
@@ -40,17 +41,16 @@
     height: 55px;
     padding: 7.5px;
 
-    color: #cbccd0; // ! EDIT
+    color: $keyboard-key-color;
     font-size: 15px;
     text-align: center;
-    text-shadow: 1px 1px 0 #121418, 1px -1px 0 #121418, -1px 1px 0 #121418,
-        -1px -1px 0 #121418; // ! EDIT
+    text-shadow: $keyboard-key-text-shadow;
 
     cursor: pointer;
     outline: none;
     border-radius: 6px;
-    border: 1px solid #010206; // ! EDIT
-    background: linear-gradient(#2f3135, #181a1e, #181a1e); // ! EDIT
+    border: 1px solid $keyboard-key-border-color;
+    background: $keyboard-key-background-linear-gradient;
 
     display: flex;
     align-items: center;
@@ -58,9 +58,9 @@
 
     position: relative;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 0 1px 1px #16171b, inset 0 0 1px 1px #2f3135; // ! EDIT
+    box-shadow: $keyboard-key-box-shadow;
     transition: background-color 0.09s ease-out, box-shadow 0.09s ease-out,
-        transform 0.09s ease-out; // ! EDIT
+        transform 0.09s ease-out;
 
     @media (max-width: 920px) {
         width: 6vw;
@@ -68,16 +68,12 @@
         padding: 0.81vw;
         font-size: 14px;
         border-radius: 0.655vw;
-        border: 0.109vw solid #010206; // ! EDIT
-        text-shadow: 0.109vw 0.109vw 0 #121418, 0.109vw -0.109vw 0 #121418,
-            -0.109vw 0.109vw 0 #121418, -0.109vw -0.109vw 0 #121418; // ! EDIT
-        box-shadow: 0 0 0.109vw 0.109vw #16171b,
-            inset 0 0 0.109vw 0.109vw #2f3135; // ! EDIT
+        border: 0.109vw solid $keyboard-key-border-color;
     }
 
     &.close {
         background: url('../../../../assets/images/keyboard-close.svg')
-            center/43% no-repeat #202226; // ! EDIT
+            center/43% no-repeat $keyboard-key-close-background-color;
     }
 
     img {
@@ -132,7 +128,7 @@
         height: 4px;
 
         border-radius: 50%;
-        background-color: #808080; // ! EDIT
+        background-color: $keyboard-key-activatable-background-color;
 
         position: absolute;
         top: 8px;
@@ -145,7 +141,7 @@
     }
 
     &.active::after {
-        background-color: #08ff00; // ! EDIT
+        background-color: $keyboard-key-active-background-color;
     }
 
     &.arrow-left::before {

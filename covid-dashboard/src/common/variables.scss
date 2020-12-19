@@ -7,5 +7,28 @@ $secondary-text-color: #adb0bb;
 $primary-border-color: #42464d;
 $secondary-border-color: #5a5d63;
 
-$map-button-background-color:rgb(0, 0, 0);
-$map-button-background-color-active:rgb(63, 63, 63);
+$map-button-background-color: rgb(0, 0, 0);
+$map-button-background-color-active: rgb(63, 63, 63);
+
+$datalist-background-color: #ffffff;
+$datalist-background-color-hover: #c8c8c9;
+
+$keyboard-background-color: #595b5f;
+$keyboard-background-linear-gradient: linear-gradient(#515558, #595b5f);
+$keyboard-box-shadow: 1px 7.25px 10.3px 0 rgba(0, 0, 0, 0.4),
+    0 3.2px 6.4px 0 rgba(0, 0, 0, 0.4);
+
+$keyboard-key-color: #cbccd0;
+$keyboard-key-text-shadow: 1px 1px 0 #121418, 1px -1px 0 #121418,
+    -1px 1px 0 #121418, -1px -1px 0 #121418;
+$keyboard-key-border-color: #010206;
+$keyboard-key-background-linear-gradient: linear-gradient(
+    #2f3135,
+    #181a1e,
+    #181a1e
+);
+$keyboard-key-box-shadow: 0 0 1px 1px #16171b, inset 0 0 1px 1px #2f3135;
+$keyboard-key-close-background-color: #202226;
+
+$keyboard-key-activatable-background-color: #808080;
+$keyboard-key-active-background-color: #08ff00;

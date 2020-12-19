@@ -1,10 +1,12 @@
+@import '../../../../common/variables.scss';
+
 .datalist {
     width: 100%;
     max-height: calc(100vh - 11px);
     overflow-y: scroll;
 
     border-radius: 5px;
-    background-color: #ffffff; // ! EDIT
+    background-color: $datalist-background-color;
 
     position: absolute;
     top: 45px;
@@ -25,7 +27,7 @@
         cursor: pointer;
 
         &:hover {
-            background-color: #c8c8c9; // ! EDIT
+            background-color: $datalist-background-color-hover;
         }
 
         &:first-child {
