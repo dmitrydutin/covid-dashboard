@@ -24,6 +24,7 @@ export default class CovidDiagram extends Basic {
         const scaleButton = this.createScaleButton(covidDiagram);
 
         covidDiagram.classList.add('covid-diagram');
+        this.#covidDiagramContainer.classList.add('covid-diagram__container');
 
         this.fillDiagram();
         Store.subscribe(this.fillDiagram.bind(this));
