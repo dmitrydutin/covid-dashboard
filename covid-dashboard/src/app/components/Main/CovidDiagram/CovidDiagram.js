@@ -66,21 +66,6 @@ export default class CovidDiagram extends Basic {
         await this.getLocaleDataPopulationFromApi();
         let diagramClickCounter = 0;
 
-        // const CommentOptions = [
-        //     Cases,
-        //     Deaths,
-        //     Recovered,
-        //     DailyCases,
-        //     DailyDeaths,
-        //     DailyRecovered,
-        //     Cases/100k,
-        //     Deaths/100k,
-        //     Recovered/100k,
-        //     DailyCases/100k,
-        //     DailyDeaths/100k,
-        //     DailyRecovered/100k,
-        // ];
-
         const options = [
             this.createOptions(['#8a85ff'], 'Cases', Store.country
                 ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0]),
