@@ -19,8 +19,6 @@ import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
 import LeftArrow from '../../../../assets/images/slider-arrow-left.png';
 import RightArrow from '../../../../assets/images/slider-arrow-right.png';
 
-const path = 'https://datahub.io/core/geo-countries/datapackage.json';
-// eslint-disable-next-line no-underscore-dangle
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
 
 LeafletMap.Icon.Default.mergeOptions({
@@ -100,7 +98,6 @@ export default class CovidMap extends Basic {
         });
         Store.subscribeCriterion((criterion) => {
             const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
-            console.log(index);
             swiper.slideTo(index + 1, 1500);
         });
         return buttonContainer;
@@ -177,7 +174,6 @@ export default class CovidMap extends Basic {
                 this.updateCriterion.bind(this),
             );
         }).then(() => {
-            // control that shows state info on hover
             const info = LeafletMap.control();
             const { data } = this;
             info.onAdd = function (map) {
@@ -206,11 +202,6 @@ export default class CovidMap extends Basic {
                     const countryIndex = data.map((element) => element.country)
                         .findIndex((elem) => elem === str);
                     if (countryIndex === -1) return;
-                    const maxCases = data.reduce(
-                        (prev, current) => ((prev[Store.criterion.value]
-                            > current[Store.criterion.value])
-                            ? prev : current),
-                    )[Store.criterion.value];
                     const country = data[countryIndex];
                     this._div.innerHTML = `<h4>${Store.criterion.name}</h4>${props
                         ? `<img src="${country.countryInfo.flag}"><b>${props.name}</b><br />${country[Store.criterion.value]} people`
@@ -234,7 +225,7 @@ export default class CovidMap extends Basic {
                     for (let i = 0; i < grades.length; i++) {
                         from = grades[i];
                         to = grades[i + 1];
-                        let rad;// 250000
+                        let rad;
                         switch (from) {
                             case 0:
                                 rad = 5;
@@ -299,10 +290,6 @@ export default class CovidMap extends Basic {
             function resetHighlight(e) {
                 geojson.resetStyle(e.target);
                 info.update();
-            }
-
-            function zoomToFeature(e) {
-                mymap.fitBounds(e.target.getBounds());
             }
 
             function onEachFeature(feature, layer) {
