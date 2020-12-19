@@ -1,6 +1,13 @@
 class Store {
     #country = null;
+    #criterion = {
+        name: 'Total number of cases',
+        value: 'cases',
+        color: '#BC0000',
+    };
+
     #subscribers = [];
+    #subscribersCriterion = [];
 
     get country() {
         return this.#country;
@@ -10,6 +17,14 @@ class Store {
         this.#country = country;
     }
 
+    get criterion() {
+        return this.#criterion;
+    }
+
+    set criterion(criterion) {
+        this.#criterion = criterion;
+    }
+
     subscribe(listener) {
         this.#subscribers.push(listener);
     }
@@ -17,6 +32,16 @@ class Store {
     notify() {
         this.#subscribers.forEach((listener) => {
             listener(this.#country);
+        });
+    }
+
+    subscribeCriterion(listener) {
+        this.#subscribersCriterion.push(listener);
+    }
+
+    notifyCriterion() {
+        this.#subscribersCriterion.forEach((listener) => {
+            listener(this.#criterion);
         });
     }
 }
