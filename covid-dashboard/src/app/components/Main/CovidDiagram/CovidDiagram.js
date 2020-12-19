@@ -96,14 +96,14 @@ export default class CovidDiagram extends Basic {
                     .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                         - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
             this.createOptions(['#8a85ff'], 'Cases/100K', Store.country
-                ? this.#localeDataRecoveredValue[0]
+                ? this.#localeDataCasesValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
-                : this.#globalDataRecoveredValue[0]
+                : this.#globalDataCasesValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
             this.createOptions(['#dd0e45'], 'Deaths/100K', Store.country
-                ? this.#localeDataRecoveredValue[0]
+                ? this.#localeDataDeathsValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
-                : this.#globalDataRecoveredValue[0]
+                : this.#globalDataDeathsValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
             this.createOptions(['#0edd5d'], 'Recovered/100K', Store.country
                 ? this.#localeDataRecoveredValue[0]
