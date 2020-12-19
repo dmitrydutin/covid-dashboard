@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars  */
 /* eslint-disable no-param-reassign */
 import './CovidMap.scss';
-
 import 'leaflet/dist/leaflet.css';
 
 import LeafletMap from 'leaflet';
@@ -17,6 +16,7 @@ import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
 import LeftArrow from '../../../../assets/images/slider-arrow-left.png';
 import RightArrow from '../../../../assets/images/slider-arrow-right.png';
 
+// eslint-disable-next-line no-underscore-dangle
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
 
 LeafletMap.Icon.Default.mergeOptions({

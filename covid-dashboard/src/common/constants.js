@@ -1,5 +1,6 @@
 const DIAGRAM_WORD_POPULATION = 7753933875;
 const ACCESS_TOKEN = 'sk.eyJ1IjoiYXNiYXJuIiwiYSI6ImNraW16YjR6czAzeXoyeW95cHUya3djdTIifQ.nhucE6in6G6-Np4PI-CyFA';
+
 const CRITERIONS = [
     {
         name: 'Total number of cases',
@@ -60,6 +61,7 @@ const CRITERIONS = [
         name: 'Number of recoveries per 100 thousand population in the last day',
         value: 'todayRecoveredPer100K',
         color: '#15153D',
-    }];
+    },
+];
 
 export { ACCESS_TOKEN, DIAGRAM_WORD_POPULATION, CRITERIONS };

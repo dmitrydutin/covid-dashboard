@@ -2,22 +2,34 @@ import './Header.scss';
 import { headerAPI } from '../../api/api';
 import Store from '../Store/store';
 import { countryInclude } from '../../../common/helpers';
+import Datalist from './Datalist/Datalist';
+import Keyboard from './Keyboard/Keyboard';
 
 export default class Header {
-    #searchDatalist = null;
     #countries = [];
 
     render() {
         const header = document.createElement('header');
-        header.classList.add('header');
-
         const logo = this.#createLogo();
+        const searchForm = document.createElement('div');
         const searchInput = this.#createSearchInput();
-        const searchDatalist = this.#createSearchDatalist();
+        const searchDatalist = new Datalist(searchInput, []);
+        const keyboard = new Keyboard(searchInput).render();
+
+        this.#getCountries().then(() => {
+            searchDatalist.config = this.#countries;
+            searchDatalist.fill('');
+        });
+
+        header.classList.add('header');
+        searchForm.classList.add('header__search-form');
+
+        searchForm.append(searchInput);
+        searchForm.append(searchDatalist.render());
 
         header.append(logo);
-        header.append(searchInput);
-        header.append(searchDatalist);
+        header.append(searchForm);
+        header.append(keyboard);
 
         return header;
     }
@@ -35,11 +47,6 @@ export default class Header {
 
         searchInput.type = 'search';
         searchInput.placeholder = 'Search country...';
-        searchInput.setAttribute('list', 'search-datalist');
-
-        searchInput.addEventListener('change', () => {
-            this.#chooseCountryListener(searchInput.value);
-        });
 
         searchInput.addEventListener('search', () => {
             this.#chooseCountryListener(searchInput.value);
@@ -55,30 +62,11 @@ export default class Header {
         }
     }
 
-    #createSearchDatalist() {
-        this.#searchDatalist = document.createElement('datalist');
-
-        this.#searchDatalist.classList.add('header__search-datalist');
-        this.#searchDatalist.id = 'search-datalist';
-        this.#getCountries();
-
-        return this.#searchDatalist;
-    }
-
-    #fillSearchDatalist() {
-        this.#countries.forEach((country) => {
-            const option = document.createElement('option');
-            option.value = country.name;
-            this.#searchDatalist.append(option);
-        });
-    }
-
     async #getCountries() {
         const response = await headerAPI.getCountries();
 
         if (response.status === 200) {
             this.#countries = response.data;
-            this.#fillSearchDatalist();
         } else {
             throw new Error('List of countries not received');
         }
