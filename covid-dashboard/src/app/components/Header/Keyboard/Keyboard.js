@@ -24,6 +24,15 @@ export default class Keyboard {
             this.elements.keyboard.classList.remove('keyboard--hidden');
         });
 
+        window.addEventListener('click', (event) => {
+            const keyboard = event.target.closest('.keyboard');
+            const input = event.target.closest('input');
+
+            if (keyboard === null && input === null) {
+                this.elements.keyboard.classList.add('keyboard--hidden');
+            }
+        });
+
         this.elements.textBlock.addEventListener('click', () => {
             this.properties.cursorPosition = this.elements.textBlock.selectionStart;
         });
