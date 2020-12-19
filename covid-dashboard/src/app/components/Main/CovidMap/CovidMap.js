@@ -82,7 +82,7 @@ export default class CovidMap extends Basic {
         const swiper = new Swiper(buttonContainer, {
             slidesPerView: 1,
             spaceBetween: 30,
-            loop: false,
+            loop: true,
             navigation: {
                 nextEl: buttonNext,
                 prevEl: buttonPrev,
@@ -109,7 +109,7 @@ export default class CovidMap extends Basic {
                     color,
                     fillColor: color,
                     fillOpacity: 1,
-                    radius: 1000000 * (element[criterion] / maxCases),
+                    radius: 250000 * (element[criterion] / maxCases),
                 });
 
             circle.bindPopup(this.renderPopup(element, criterion));
