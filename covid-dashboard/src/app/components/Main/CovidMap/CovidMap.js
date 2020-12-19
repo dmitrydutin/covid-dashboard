@@ -98,7 +98,11 @@ export default class CovidMap extends Basic {
                 CRITERIONS[swiper.realIndex].color,
             );
         });
-
+        Store.subscribeCriterion((criterion) => {
+            const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
+            console.log(index);
+            swiper.slideTo(index + 1, 1500);
+        });
         return buttonContainer;
     }
 
