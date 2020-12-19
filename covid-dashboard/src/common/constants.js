@@ -1,6 +1,6 @@
 const DIAGRAM_WORD_POPULATION = 7753933875;
-const accessToken = 'sk.eyJ1IjoiYXNiYXJuIiwiYSI6ImNraW16YjR6czAzeXoyeW95cHUya3djdTIifQ.nhucE6in6G6-Np4PI-CyFA';
-const criterions = [
+const ACCESS_TOKEN = 'sk.eyJ1IjoiYXNiYXJuIiwiYSI6ImNraW16YjR6czAzeXoyeW95cHUya3djdTIifQ.nhucE6in6G6-Np4PI-CyFA';
+const CRITERIONS = [
     {
         name: 'Total number of cases',
         value: 'cases',
@@ -62,4 +62,4 @@ const criterions = [
         color: '#15153D',
     }];
 
-export { accessToken, DIAGRAM_WORD_POPULATION, criterions };
+export { ACCESS_TOKEN, DIAGRAM_WORD_POPULATION, CRITERIONS };
