@@ -26,7 +26,6 @@ export default class CovidDiagram extends Basic {
 
         covidDiagram.classList.add('covid-diagram');
         this.#covidDiagramContainer.classList.add('covid-diagram__container');
-        this.#covidDiagramContainer.id = 'chart';
 
         this.fillDiagram();
         Store.subscribe(this.fillDiagram.bind(this));
