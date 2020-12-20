@@ -11,13 +11,13 @@ import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import Swiper from 'swiper/bundle';
 import 'swiper/swiper-bundle.css';
-import statesData from './custom.geo1.json';
+import statesData from './custom.geo.json';
 import Store from '../../Store/store';
 import Basic from '../Basic/Basic';
 import { mapAPI } from '../../../api/api';
 import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
-import LeftArrow from '../../../../assets/images/slider-arrow-left.png';
-import RightArrow from '../../../../assets/images/slider-arrow-right.png';
+import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
+import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
 
 delete LeafletMap.Icon.Default.prototype._getIconUrl;
 
@@ -98,7 +98,7 @@ export default class CovidMap extends Basic {
         });
         Store.subscribeCriterion((criterion) => {
             const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
-            swiper.slideTo(index + 1, 1500);
+            swiper.slideTo(index + 1, 250);
         });
         return buttonContainer;
     }
@@ -263,8 +263,8 @@ export default class CovidMap extends Basic {
                 return {
                     weight: 3,
                     opacity: 1,
-                    color: 'black',
-                    fillColor: 'rgb(0, 0, 0)',
+                    color: '#81858c',
+                    fillColor: '#81858c',
                 };
             }
             function highlightFeature(e) {
@@ -272,7 +272,7 @@ export default class CovidMap extends Basic {
 
                 layer.setStyle({
                     weight: 3,
-                    color: '#666',
+                    color: '#81858c',
                     fillOpacity: 0.5,
                 });
 

@@ -12,4 +12,41 @@
     &.scale {
         @include block-scale;
     }
+
+    .statistics-table-container {
+        width: 100%;
+
+        .statistics-table {
+            border-collapse: collapse;
+            color: #ffffff;
+            width: 100%;
+            word-break: break-word;
+            font-size: 20px;
+            text-align: center;
+
+            .statistics-table-th {
+                background-color: $map-button-background-color;
+                border: 3px solid $map-button-background-color;
+            }
+
+            .statistics-table-td {
+                padding: 5px;
+                border: 3px solid $map-button-background-color;
+            }
+        }
+    }
 }
+
+
+
+@media (max-width: 700px) {
+    .statistics-table {
+        font-size: 15px;
+    }
+
+    .statistics-table-td {
+        padding: 0;
+    }
+}
+
+
