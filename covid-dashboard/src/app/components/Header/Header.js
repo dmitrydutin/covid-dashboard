@@ -15,6 +15,7 @@ export default class Header {
         const searchInput = this.#createSearchInput();
         const searchDatalist = new Datalist(searchInput, []);
         const keyboard = new Keyboard(searchInput).render();
+        const themeButton = this.#createThemeButton();
 
         this.#getCountries().then(() => {
             searchDatalist.config = this.#countries;
@@ -30,6 +31,7 @@ export default class Header {
         header.append(logo);
         header.append(searchForm);
         header.append(keyboard);
+        header.append(themeButton);
 
         return header;
     }
@@ -70,5 +72,17 @@ export default class Header {
         } else {
             throw new Error('List of countries not received');
         }
+    }
+
+    #createThemeButton() {
+        const themeButton = document.createElement('button');
+        themeButton.classList.add('header__theme-button');
+
+        themeButton.addEventListener('click', () => {
+            console.log('click');
+            themeButton.classList.toggle('active');
+        });
+
+        return themeButton;
     }
 }

@@ -67,9 +67,12 @@ export default class Datalist {
     #targetEvents() {
         this.#datalist.addEventListener('click', (event) => {
             if (event.target !== event.currentTarget) {
-                this.#searchInput.value = event.target.textContent;
+                const targetText = event.target.textContent;
+
+                this.#searchInput.value = targetText;
                 this.#searchInput.dispatchEvent(new Event('search'));
-                this.fill(event.target.textContent);
+
+                this.fill(targetText);
             }
         });
     }

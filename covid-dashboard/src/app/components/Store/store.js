@@ -8,6 +8,7 @@ class Store {
 
     #subscribers = [];
     #subscribersCriterion = [];
+    #theme = 'dark';
 
     get country() {
         return this.#country;
@@ -23,6 +24,14 @@ class Store {
 
     set criterion(criterion) {
         this.#criterion = criterion;
+    }
+
+    get theme() {
+        return this.#theme;
+    }
+
+    set theme(theme) {
+        this.#theme = theme;
     }
 
     subscribe(listener) {

@@ -20,6 +20,18 @@ export default class Keyboard {
         this.elements.textBlock = textBlock;
         this.elements.keysConfig = config;
 
+        this.#setKeyboardListeners();
+    }
+
+    render() {
+        this.elements.keyboard = document.createElement('div');
+        this.elements.keyboard.classList.add('keyboard', 'keyboard--hidden');
+        this.#fillKeyboard();
+
+        return this.elements.keyboard;
+    }
+
+    #setKeyboardListeners() {
         this.elements.textBlock.addEventListener('focus', () => {
             this.elements.keyboard.classList.remove('keyboard--hidden');
         });
@@ -36,14 +48,6 @@ export default class Keyboard {
         this.elements.textBlock.addEventListener('click', () => {
             this.properties.cursorPosition = this.elements.textBlock.selectionStart;
         });
-    }
-
-    render() {
-        this.elements.keyboard = document.createElement('div');
-        this.elements.keyboard.classList.add('keyboard', 'keyboard--hidden');
-        this.#fillKeyboard();
-
-        return this.elements.keyboard;
     }
 
     #fillKeyboard() {
@@ -114,14 +118,7 @@ export default class Keyboard {
                 if (this.#isTextRange()) {
                     this.#setText('');
                 } else if (this.properties.cursorPosition > 0) {
-                    this.properties.value = this.properties.value.slice(
-                        0,
-                        this.properties.cursorPosition - 1,
-                    )
-                        + this.properties.value.slice(
-                            this.properties.cursorPosition,
-                        );
-
+                    this.properties.value = this.#getUnselectedText(this.properties.cursorPosition);
                     this.elements.textBlock.value = this.properties.value;
                     this.#setCursorPosition(-1);
                 }
@@ -143,10 +140,6 @@ export default class Keyboard {
                 this.properties.shift = !this.properties.shift;
                 this.#fillKeyboard();
                 break;
-            case 'control':
-                break;
-            case 'alt':
-                break;
             case 'close':
                 this.elements.textBlock.blur();
                 this.elements.keyboard.classList.add('keyboard--hidden');
@@ -159,10 +152,14 @@ export default class Keyboard {
                 this.#setText(' ');
                 break;
             case 'arrow-left':
-                this.#setCursorPosition(-1);
+                this.#setCursorPosition('left');
                 break;
             case 'arrow-right':
-                this.#setCursorPosition(1);
+                this.#setCursorPosition('right');
+                break;
+            case 'control':
+                break;
+            case 'alt':
                 break;
             default:
                 this.#setText(keyConfig[this.properties.lang][this.#getType()]);
@@ -173,6 +170,13 @@ export default class Keyboard {
         }
     }
 
+    #getUnselectedText(cursorPosition) {
+        const leftUnselectedText = this.properties.value.slice(0, cursorPosition - 1);
+        const rightUnselectedText = this.properties.value.slice(cursorPosition);
+
+        return leftUnselectedText + rightUnselectedText;
+    }
+
     #setText(text) {
         this.elements.textBlock.setRangeText(
             text,
@@ -180,6 +184,7 @@ export default class Keyboard {
             this.elements.textBlock.selectionEnd,
             'end',
         );
+
         this.properties.value = this.elements.textBlock.value;
         this.properties.cursorPosition = this.elements.textBlock.selectionStart;
 
@@ -193,16 +198,15 @@ export default class Keyboard {
         );
     }
 
-    #setCursorPosition(mixing) {
-        if (mixing === 1) {
-            if (
-                this.properties.cursorPosition
-                < this.elements.textBlock.value.length
-            ) {
+    #setCursorPosition(direction) {
+        if (direction === 'right') {
+            if (this.properties.cursorPosition < this.elements.textBlock.value.length) {
                 this.properties.cursorPosition += 1;
             }
-        } else if (this.properties.cursorPosition > 0) {
-            this.properties.cursorPosition -= 1;
+        } else if (direction === 'left') {
+            if (this.properties.cursorPosition > 0) {
+                this.properties.cursorPosition -= 1;
+            }
         }
 
         this.elements.textBlock.selectionStart = this.properties.cursorPosition;

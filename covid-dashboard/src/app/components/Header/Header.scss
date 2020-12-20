@@ -7,19 +7,22 @@
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
 
     background-color: $primary-color;
     @include block-shadow;
 
     &__logo {
+        margin-right: 15px;
+        min-width: 140px;
+
         color: $primary-text-color;
         @include header-logo;
     }
 
     &__search-form {
         position: relative;
-        margin-left: 30px;
+        margin-left: auto;
+        margin-right: 15px;
 
         flex-grow: 1;
         max-width: 320px;
@@ -35,8 +38,8 @@
         outline: none;
         border-radius: 4px;
         border: 1px solid $secondary-border-color;
-        background: no-repeat 13px center/19px
-            url('../../../assets/images/search.svg');
+        background: no-repeat 13px center/19px;
+        background-image: url('../../../assets/images/search.svg');
         transition: background-color 0.1s linear;
 
         &:hover {
@@ -45,6 +48,25 @@
 
         &:focus {
             background-color: $secondary-color;
+        }
+    }
+
+    &__theme-button {
+        width: 44px;
+        height: 44px;
+
+        cursor: pointer;
+        border: none;
+        outline: none;
+        background-color: transparent;
+
+        background-image: url('../../../assets/images/sun.svg');
+        background-repeat: no-repeat;
+        background-size: 60%;
+        background-position: center;
+
+        &.active {
+            background-image: url('../../../assets/images/moon.svg');
         }
     }
 }
