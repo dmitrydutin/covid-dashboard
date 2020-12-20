@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 import './CovidDiagram.scss';
 import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
@@ -24,6 +25,7 @@ export default class CovidDiagram extends Basic {
         const scaleButton = this.createScaleButton(covidDiagram);
 
         covidDiagram.classList.add('covid-diagram');
+        this.#covidDiagramContainer.classList.add('covid-diagram__container');
 
         this.fillDiagram();
         Store.subscribe(this.fillDiagram.bind(this));
@@ -40,11 +42,8 @@ export default class CovidDiagram extends Basic {
         this.buildDiagram();
     }
 
-    createOptions(colorsArg, titleTextArg, dataOptions, animationsArg = { enabled: false }) {
+    createOptions(colorsArg, titleTextArg, dataOptions) {
         return {
-            chart: {
-                animations: animationsArg,
-            },
             colors: colorsArg,
             title: {
                 text: `${Store.country || 'Global'} ${titleTextArg}`,
@@ -60,56 +59,55 @@ export default class CovidDiagram extends Basic {
     }
 
     async buildDiagram() {
-        // eslint-disable-next-line no-use-before-define
         await this.getGlobalDataFromApi();
         await this.getLocaleDataFromApi();
         await this.getLocaleDataPopulationFromApi();
         let diagramClickCounter = 0;
 
         const options = [
-            this.createOptions(['#8a85ff'], 'Cases', Store.country
+            this.createOptions(['#BC0000'], 'Cases', Store.country
                 ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0]),
-            this.createOptions(['#dd0e45'], 'Deaths', Store.country
+            this.createOptions(['#ffff0a'], 'Deaths', Store.country
                 ? this.#localeDataDeathsValue[0] : this.#globalDataDeathsValue[0]),
-            this.createOptions(['#0edd5d'], 'Recovered', Store.country
+            this.createOptions(['#00bc00'], 'Recovered', Store.country
                 ? this.#localeDataRecoveredValue[0] : this.#globalDataRecoveredValue[0]),
-            this.createOptions(['#8a85ff'], 'Daily Cases', Store.country
+            this.createOptions(['#880000'], 'Daily Cases', Store.country
                 ? this.#localeDataCasesValue[0]
                     .map((el, index) => this.#localeDataCasesValue[0][index + 1]
                         - this.#localeDataCasesValue[0][index]).map((el) => Math.abs(el))
                 : this.#globalDataCasesValue[0]
                     .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                         - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#dd0e45'], 'Daily Deaths', Store.country
+            this.createOptions(['#B5B800'], 'Daily Deaths', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
                         - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
                 : this.#globalDataDeathsValue[0]
                     .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
                         - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#0edd5d'], 'Daily Recovered', Store.country
+            this.createOptions(['#0042E5'], 'Daily Recovered', Store.country
                 ? this.#localeDataRecoveredValue[0]
                     .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
                         - this.#localeDataRecoveredValue[0][index]).map((el) => Math.abs(el))
                 : this.#globalDataRecoveredValue[0]
                     .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                         - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#8a85ff'], 'Cases/100K', Store.country
+            this.createOptions(['#4B0000'], 'Cases/100K', Store.country
                 ? this.#localeDataCasesValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataCasesValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
-            this.createOptions(['#dd0e45'], 'Deaths/100K', Store.country
+            this.createOptions(['#727317'], 'Deaths/100K', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataDeathsValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
-            this.createOptions(['#0edd5d'], 'Recovered/100K', Store.country
+            this.createOptions(['#002582'], 'Recovered/100K', Store.country
                 ? this.#localeDataRecoveredValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataRecoveredValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
-            this.createOptions(['#8a85ff'], 'Daily Cases/100K', Store.country
+            this.createOptions(['#EE5A5A'], 'Daily Cases/100K', Store.country
                 ? this.#localeDataCasesValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     .map((el, index) => this.#localeDataCasesValue[0][index + 1]
@@ -118,7 +116,7 @@ export default class CovidDiagram extends Basic {
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                     .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                         - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#dd0e45'], 'Daily Deaths/100K', Store.country
+            this.createOptions(['#727317'], 'Daily Deaths/100K', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
@@ -127,7 +125,7 @@ export default class CovidDiagram extends Basic {
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                     .map((el, index) => this.#globalDataDeathsValue[0][index + 1]
                         - this.#globalDataDeathsValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#0edd5d'], 'Daily Recovered/100K', Store.country
+            this.createOptions(['#15153D'], 'Daily Recovered/100K', Store.country
                 ? this.#localeDataRecoveredValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     .map((el, index) => this.#localeDataRecoveredValue[0][index + 1]
@@ -139,11 +137,14 @@ export default class CovidDiagram extends Basic {
         ];
 
         const chart = new ApexCharts(this.#covidDiagramContainer, {
-            colors: ['#8a85ff'],
+            colors: ['#BC0000'],
             theme: {
                 mode: 'dark',
             },
             chart: {
+                animations: {
+                    enabled: false,
+                },
                 type: 'area',
                 defaultLocale: 'en',
                 toolbar: {
@@ -179,7 +180,7 @@ export default class CovidDiagram extends Basic {
                             class: 'next-category-icon',
                             click() {
                                 if (diagramClickCounter === 11) {
-                                    diagramClickCounter -= 12;
+                                    diagramClickCounter = -1;
                                 }
                                 diagramClickCounter += 1;
                                 Store.criterion = CRITERIONS[options
@@ -216,6 +217,7 @@ export default class CovidDiagram extends Basic {
                 categories: this.#dataDate[0],
             },
         });
+
         chart.render();
         if (Store.criterion.name !== 'Total number of cases') {
             chart.updateOptions(options[CRITERIONS.indexOf(Store.criterion)]);

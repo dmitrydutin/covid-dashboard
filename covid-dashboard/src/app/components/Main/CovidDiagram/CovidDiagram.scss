@@ -12,6 +12,12 @@
     &.scale {
         @include block-scale;
     }
+
+    &__container {
+        width: 100%;
+        max-width: 1044px;
+        margin: 0 auto;
+    }
 }
 
 .prev-category-icon,

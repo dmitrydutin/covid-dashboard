@@ -66,7 +66,9 @@ export default class Header {
         const response = await headerAPI.getCountries();
 
         if (response.status === 200) {
-            this.#countries = response.data;
+            this.#countries = response.data
+                .filter((v, i, a) => a.findIndex((t) => (t.country
+                    === v.country)) === i);
         } else {
             throw new Error('List of countries not received');
         }
