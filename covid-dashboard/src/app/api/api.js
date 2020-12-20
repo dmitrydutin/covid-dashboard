@@ -27,4 +27,12 @@ const mapAPI = {
     },
 };
 
-export { headerAPI, mapAPI, diagramAPI };
+const tableAPI = {
+    getAllData() {
+        return axios.get('https://disease.sh/v3/covid-19/all');
+    },
+};
+
+export {
+    headerAPI, mapAPI, diagramAPI, tableAPI,
+};
