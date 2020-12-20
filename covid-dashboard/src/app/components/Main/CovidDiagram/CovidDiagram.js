@@ -226,10 +226,10 @@ export default class CovidDiagram extends Basic {
     }
 
     async getGlobalDataFromApi() {
-        const responce = await diagramAPI.getGlobalDataFromApi();
+        const response = await diagramAPI.getGlobalDataFromApi();
 
-        if (responce.status === 200) {
-            const { data } = responce;
+        if (response.status === 200) {
+            const { data } = response;
             this.#globalDataCasesValue.push(Object.values(data.cases));
             this.#globalDataDeathsValue.push(Object.values(data.deaths));
             this.#globalDataRecoveredValue.push(Object.values(data.recovered));
@@ -241,9 +241,9 @@ export default class CovidDiagram extends Basic {
 
     async getLocaleDataFromApi() {
         if (Store.country) {
-            const responce = await diagramAPI.getLocaleDataFromApi(Store.country);
-            if (responce.status === 200) {
-                const { data } = responce;
+            const response = await diagramAPI.getLocaleDataFromApi(Store.country);
+            if (response.status === 200) {
+                const { data } = response;
                 this.#localeDataCasesValue = [];
                 this.#localeDataDeathsValue = [];
                 this.#localeDataRecoveredValue = [];
@@ -258,9 +258,9 @@ export default class CovidDiagram extends Basic {
 
     async getLocaleDataPopulationFromApi() {
         if (Store.country) {
-            const responce = await diagramAPI.getLocaleDataPopulationFromApi(Store.country);
-            if (responce.status === 200) {
-                const { data } = responce;
+            const response = await diagramAPI.getLocaleDataPopulationFromApi(Store.country);
+            if (response.status === 200) {
+                const { data } = response;
                 this.#localeDataPopulation = null;
                 this.#localeDataPopulation = data.population;
             } else {

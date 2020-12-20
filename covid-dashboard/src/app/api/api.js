@@ -14,7 +14,13 @@ const diagramAPI = {
 
 const headerAPI = {
     getCountries() {
-        return axios.get('https://disease.sh/v3/covid-19/historical?lastdays=30');
+        return axios.get('https://disease.sh/v3/covid-19/historical?lastdays=1');
+    },
+};
+
+const listAPI = {
+    getCountriesForTwoDays() {
+        return axios.get('https://disease.sh/v3/covid-19/historical?lastdays=2');
     },
 };
 
@@ -34,5 +40,5 @@ const tableAPI = {
 };
 
 export {
-    headerAPI, mapAPI, diagramAPI, tableAPI,
+    headerAPI, mapAPI, diagramAPI, tableAPI, listAPI,
 };
