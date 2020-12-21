@@ -90,14 +90,12 @@ export default class CovidMap extends Basic {
             },
         });
         buttonPrev.addEventListener('click', () => {
-            console.log('MAP');
             this.#changeCriterion(
                 mymap, CRITERIONS[swiper.realIndex].value,
                 CRITERIONS[swiper.realIndex].color,
             );
         });
         buttonNext.addEventListener('click', () => {
-            console.log('MAP');
             this.#changeCriterion(
                 mymap, CRITERIONS[swiper.realIndex].value,
                 CRITERIONS[swiper.realIndex].color,

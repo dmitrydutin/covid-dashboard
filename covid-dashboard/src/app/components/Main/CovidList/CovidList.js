@@ -18,7 +18,7 @@ export default class CovidList extends Basic {
     render() {
         const covidList = document.createElement('div');
         const scaleButton = this.createScaleButton(covidList);
-        const covidListContainer = document.createElement('div');
+        const covidListContainer = document.createElement('table');
 
         covidListContainer.classList.add('list__container');
         covidList.append(covidListContainer);
@@ -52,27 +52,27 @@ export default class CovidList extends Basic {
 
         const covidListContainer = document.querySelector('.list__container');
 
-        const caption = document.createElement('div');
+        const caption = document.createElement('thead');
         caption.classList.add('list__container-caption');
         covidListContainer.append(caption);
 
-        const captionCountryName = document.createElement('div');
+        const trCaption = document.createElement('tr');
+        trCaption.classList.add('list__container-tr-caption');
+        caption.append(trCaption);
+
+        const captionCountryName = document.createElement('th');
         captionCountryName.classList.add('list__container-caption-country-name');
-        caption.append(captionCountryName);
+        trCaption.append(captionCountryName);
         captionCountryName.textContent = 'Country';
 
-        const captionValue = document.createElement('div');
+        const captionValue = document.createElement('th');
         captionValue.classList.add('list__container-caption-country-value');
-        caption.append(captionValue);
+        trCaption.append(captionValue);
         captionValue.textContent = 'Value';
 
-        const listBody = document.createElement('div');
-        listBody.classList.add('list__container-listbody');
-        covidListContainer.append(listBody);
-
-        const table = document.createElement('table');
-        table.classList.add('list__container-listbody-table');
-        listBody.append(table);
+        const listbody = document.createElement('tbody');
+        listbody.classList.add('list__container-table-listbody');
+        covidListContainer.append(listbody);
 
         this.#data.forEach((country) => {
             const criterions = [
@@ -119,20 +119,24 @@ export default class CovidList extends Basic {
             const tr = document.createElement('tr');
             const valueTd = document.createElement('td');
             const countryTd = document.createElement('td');
+
+            tr.classList.add('list__container-listbody-table-value-tr');
             valueTd.classList.add('list__container-listbody-table-value-td');
             countryTd.classList.add('list__container-listbody-table-country-td');
-            table.append(tr);
-            tr.append(countryTd);
-            tr.append(valueTd);
+
             valueTd.textContent = country.value;
             countryTd.textContent = country.country;
+
+            listbody.append(tr);
+            tr.append(countryTd);
+            tr.append(valueTd);
         });
 
         this.addListenersToListOfCountries();
     }
 
     addListenersToListOfCountries() {
-        const table = document.querySelector('.list__container-listbody-table');
+        const table = document.querySelector('.list__container-table-listbody');
         const listener = function (event) {
             if (event.target.closest('.list__container-listbody-table-country-td') === null) {
                 return;
@@ -194,14 +198,12 @@ export default class CovidList extends Basic {
             },
         });
         buttonPrev.addEventListener('click', () => {
-            console.log('LIST');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
 
             );
         });
         buttonNext.addEventListener('click', () => {
-            console.log('LIST');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
 
