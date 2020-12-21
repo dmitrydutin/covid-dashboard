@@ -161,17 +161,13 @@ export default class CovidTable extends Basic {
             },
         });
         buttonPrev.addEventListener('click', () => {
-            console.log('TABLE');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
-
             );
         });
         buttonNext.addEventListener('click', () => {
-            console.log('TABLE');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
-
             );
         });
         Store.subscribeCriterion((criterion) => {
