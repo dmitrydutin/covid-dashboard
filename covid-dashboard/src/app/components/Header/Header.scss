@@ -8,8 +8,16 @@
     display: flex;
     align-items: center;
 
+    z-index: 1600;
+    position: relative;
+
     background-color: $primary-color;
     @include block-shadow;
+
+    &.light {
+        background-color: $primary-color-light;
+        @include block-shadow-light;
+    }
 
     &__logo {
         margin-right: 15px;
@@ -49,6 +57,22 @@
         &:focus {
             background-color: $secondary-color;
         }
+
+        &.light {
+            border: 1px solid $secondary-border-color-light;
+
+            &::placeholder {
+                color: $primary-text-color-light;
+            }
+
+            &:hover {
+                background-color: $secondary-color-light;
+            }
+
+            &:focus {
+                background-color: $secondary-color-light;
+            }
+        }
     }
 
     &__theme-button {
@@ -65,7 +89,7 @@
         background-size: 60%;
         background-position: center;
 
-        &.active {
+        &.light {
             background-image: url('../../../assets/images/moon.svg');
         }
     }

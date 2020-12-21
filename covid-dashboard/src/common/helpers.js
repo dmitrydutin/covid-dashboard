@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 function countryInclude(countries, countryName) {
     return (
         countries.findIndex((country) => {
@@ -9,4 +8,11 @@ function countryInclude(countries, countryName) {
     );
 }
 
-export { countryInclude };
+function removeDuplicateCountries(data) {
+    return data.filter((item, index, array) => {
+        const countryIndex = array.findIndex((current) => current.country === item.country);
+        return countryIndex === index;
+    });
+}
+
+export { countryInclude, removeDuplicateCountries };

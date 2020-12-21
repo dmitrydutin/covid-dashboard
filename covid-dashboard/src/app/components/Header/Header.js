@@ -1,39 +1,57 @@
 import './Header.scss';
 import { headerAPI } from '../../api/api';
 import Store from '../Store/store';
-import { countryInclude } from '../../../common/helpers';
+import { countryInclude, removeDuplicateCountries } from '../../../common/helpers';
 import Datalist from './Datalist/Datalist';
 import Keyboard from './Keyboard/Keyboard';
 
 export default class Header {
     #countries = [];
+    #header = null;
+    #searchInput = null;
+    #themeButton = null;
 
     render() {
-        const header = document.createElement('header');
+        this.#header = document.createElement('header');
         const logo = this.#createLogo();
         const searchForm = document.createElement('div');
-        const searchInput = this.#createSearchInput();
-        const searchDatalist = new Datalist(searchInput, []);
-        const keyboard = new Keyboard(searchInput).render();
-        const themeButton = this.#createThemeButton();
+        this.#searchInput = this.#createSearchInput();
+        const searchDatalist = new Datalist(this.#searchInput, []);
+        const keyboard = new Keyboard(this.#searchInput).render();
+        this.#themeButton = this.#createThemeButton();
 
         this.#getCountries().then(() => {
             searchDatalist.config = this.#countries;
             searchDatalist.fill('');
         });
 
-        header.classList.add('header');
+        this.#header.classList.add('header');
         searchForm.classList.add('header__search-form');
 
-        searchForm.append(searchInput);
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
+
+        searchForm.append(this.#searchInput);
         searchForm.append(searchDatalist.render());
 
-        header.append(logo);
-        header.append(searchForm);
-        header.append(keyboard);
-        header.append(themeButton);
+        this.#header.append(logo);
+        this.#header.append(searchForm);
+        this.#header.append(keyboard);
+        this.#header.append(this.#themeButton);
 
-        return header;
+        return this.#header;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#header.classList.add('light');
+            this.#searchInput.classList.add('light');
+            this.#themeButton.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#header.classList.remove('light');
+            this.#searchInput.classList.remove('light');
+            this.#themeButton.classList.remove('light');
+        }
     }
 
     #createLogo() {
@@ -68,9 +86,7 @@ export default class Header {
         const response = await headerAPI.getCountries();
 
         if (response.status === 200) {
-            this.#countries = response.data
-                .filter((v, i, a) => a.findIndex((t) => (t.country
-                    === v.country)) === i);
+            this.#countries = removeDuplicateCountries(response.data);
         } else {
             throw new Error('List of countries not received');
         }
@@ -81,8 +97,8 @@ export default class Header {
         themeButton.classList.add('header__theme-button');
 
         themeButton.addEventListener('click', () => {
-            console.log('click');
-            themeButton.classList.toggle('active');
+            Store.theme = Store.theme === 'light' ? 'dark' : 'light';
+            Store.notifyTheme();
         });
 
         return themeButton;

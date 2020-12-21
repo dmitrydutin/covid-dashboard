@@ -1,23 +1,37 @@
 import './Footer.scss';
+import Store from '../Store/store';
 
 export default class Footer {
+    #footer = null;
+
     render() {
-        const footer = document.createElement('footer');
+        this.#footer = document.createElement('footer');
         const container = document.createElement('div');
         const footerInner = document.createElement('div');
         const footerTop = this.#createFooterTop();
         const footerBottom = this.#createFooterBottom();
 
-        footer.classList.add('footer');
+        this.#footer.classList.add('footer');
         container.classList.add('container');
         footerInner.classList.add('footer__inner');
+
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
 
         footerInner.append(footerTop);
         footerInner.append(footerBottom);
         container.append(footerInner);
-        footer.append(container);
+        this.#footer.append(container);
 
-        return footer;
+        return this.#footer;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#footer.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#footer.classList.remove('light');
+        }
     }
 
     #createFooterTop() {

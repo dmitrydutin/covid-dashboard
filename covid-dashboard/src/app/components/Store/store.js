@@ -1,4 +1,5 @@
 class Store {
+    #theme = 'dark';
     #country = null;
     #criterion = {
         name: 'Total number of cases',
@@ -8,7 +9,15 @@ class Store {
 
     #subscribers = [];
     #subscribersCriterion = [];
-    #theme = 'dark';
+    #subscribersTheme = [];
+
+    get theme() {
+        return this.#theme;
+    }
+
+    set theme(theme) {
+        this.#theme = theme;
+    }
 
     get country() {
         return this.#country;
@@ -24,14 +33,6 @@ class Store {
 
     set criterion(criterion) {
         this.#criterion = criterion;
-    }
-
-    get theme() {
-        return this.#theme;
-    }
-
-    set theme(theme) {
-        this.#theme = theme;
     }
 
     subscribe(listener) {
@@ -51,6 +52,16 @@ class Store {
     notifyCriterion() {
         this.#subscribersCriterion.forEach((listener) => {
             listener(this.#criterion);
+        });
+    }
+
+    subscribeTheme(listener) {
+        this.#subscribersTheme.push(listener);
+    }
+
+    notifyTheme() {
+        this.#subscribersTheme.forEach((listener) => {
+            listener(this.#theme);
         });
     }
 }

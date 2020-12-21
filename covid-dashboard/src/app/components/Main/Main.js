@@ -3,22 +3,44 @@ import CovidList from './CovidList/CovidList';
 import CovidMap from './CovidMap/CovidMap';
 import CovidTable from './CovidTable/CovidTable';
 import CovidDiagram from './CovidDiagram/CovidDiagram';
+import Store from '../Store/store';
 
 export default class Main {
+    #main = null;
+
     render() {
-        const main = document.createElement('main');
+        this.#main = document.createElement('main');
+        const container = document.createElement('div');
+        const mainInner = document.createElement('div');
+
         const covidList = new CovidList().render();
         const covidMap = new CovidMap().render();
         const covidTable = new CovidTable().render();
         const covidDiagram = new CovidDiagram().render();
 
-        main.classList.add('main');
+        this.#main.classList.add('main');
+        container.classList.add('main__container');
+        mainInner.classList.add('main__inner');
 
-        main.append(covidList);
-        main.append(covidMap);
-        main.append(covidTable);
-        main.append(covidDiagram);
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
 
-        return main;
+        mainInner.append(covidList);
+        mainInner.append(covidMap);
+        mainInner.append(covidTable);
+        mainInner.append(covidDiagram);
+
+        container.append(mainInner);
+        this.#main.append(container);
+
+        return this.#main;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#main.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#main.classList.remove('light');
+        }
     }
 }

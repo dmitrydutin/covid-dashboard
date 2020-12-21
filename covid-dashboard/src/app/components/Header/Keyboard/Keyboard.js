@@ -120,7 +120,7 @@ export default class Keyboard {
                 } else if (this.properties.cursorPosition > 0) {
                     this.properties.value = this.#getUnselectedText(this.properties.cursorPosition);
                     this.elements.textBlock.value = this.properties.value;
-                    this.#setCursorPosition(-1);
+                    this.#setCursorPosition('left');
                 }
 
                 this.elements.textBlock.dispatchEvent(new Event('input'));
