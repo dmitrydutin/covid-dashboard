@@ -190,7 +190,7 @@ export default class CovidList extends Basic {
                 prevEl: buttonPrev,
             },
         });
-        buttonPrev.addEventListener('transitionEnd', () => {
+        buttonPrev.addEventListener('click', () => {
             console.log('LIST');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
