@@ -131,7 +131,7 @@ export default class CovidList extends Basic {
     }
 
     addListenersToListOfCountries() {
-        const table = document.querySelector('.list__container-listbody-table');
+        const table = document.querySelector('.list__container-table-listbody');
         const listener = function (event) {
             if (event.target.closest('.list__container-listbody-table-country-td') === null) {
                 return;
