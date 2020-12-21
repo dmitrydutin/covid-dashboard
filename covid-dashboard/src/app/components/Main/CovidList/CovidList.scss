@@ -19,9 +19,9 @@
 }
 
 .list__container-table-listbody {
+    display: block;
     margin: 0;
     padding: 5px;
-    border: 1px solid #42464d;
     max-height: 600px;
     overflow-y: scroll;
 }
@@ -42,8 +42,16 @@
     }
 }
 
-.list__container-tr-caption {
+.list__container-listbody-table-value-tr {
+    display: table;
     width: 100%;
+    table-layout: fixed;
+}
+
+.list__container-tr-caption {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .list__container-caption-country-value,

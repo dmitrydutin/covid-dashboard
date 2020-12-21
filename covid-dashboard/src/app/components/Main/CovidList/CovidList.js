@@ -114,13 +114,17 @@ export default class CovidList extends Basic {
             const tr = document.createElement('tr');
             const valueTd = document.createElement('td');
             const countryTd = document.createElement('td');
+
+            tr.classList.add('list__container-listbody-table-value-tr');
             valueTd.classList.add('list__container-listbody-table-value-td');
             countryTd.classList.add('list__container-listbody-table-country-td');
+
+            valueTd.textContent = country.value;
+            countryTd.textContent = country.country;
+
             listbody.append(tr);
             tr.append(countryTd);
             tr.append(valueTd);
-            valueTd.textContent = country.value;
-            countryTd.textContent = country.country;
         });
 
         this.addListenersToListOfCountries();
