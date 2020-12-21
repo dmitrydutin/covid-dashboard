@@ -7,6 +7,7 @@ import { mapAPI } from '../../../api/api';
 export default class CovidList extends Basic {
     #data = [];
     #sortingData = [];
+    #isFirstPush = true;
 
     render() {
         const covidList = document.createElement('div');
@@ -95,14 +96,16 @@ export default class CovidList extends Basic {
                     : 1,
             ];
             const countryField = country.country;
-            const valueField = criterions[CRITERIONS.indexOf(Store.criterion)] || country.cases;
+            const valueField = criterions[CRITERIONS.indexOf(Store.criterion)];
+            const valueCasesField = country.cases;
             this.#sortingData.push({
                 country: countryField,
-                value: valueField,
+                value: this.#isFirstPush ? valueCasesField : valueField,
             });
         });
 
         this.sortData();
+        this.#isFirstPush = false;
 
         this.#sortingData.forEach((country) => {
             const tr = document.createElement('tr');
