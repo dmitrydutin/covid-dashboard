@@ -160,7 +160,7 @@ export default class CovidTable extends Basic {
                 prevEl: buttonPrev,
             },
         });
-        buttonPrev.addEventListener('transitionEnd', () => {
+        buttonPrev.addEventListener('click', () => {
             console.log('TABLE');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,

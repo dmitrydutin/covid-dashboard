@@ -89,7 +89,7 @@ export default class CovidMap extends Basic {
                 prevEl: buttonPrev,
             },
         });
-        buttonPrev.addEventListener('transitionEnd', () => {
+        buttonPrev.addEventListener('click', () => {
             console.log('MAP');
             this.#changeCriterion(
                 mymap, CRITERIONS[swiper.realIndex].value,
