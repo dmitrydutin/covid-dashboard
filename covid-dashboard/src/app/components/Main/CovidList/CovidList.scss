@@ -15,21 +15,15 @@
 }
 
 .list__container {
-    display: flex;
-    flex-direction: column;
+    width: 100%;
 }
 
-.list__container-listbody {
+.list__container-table-listbody {
+    display: block;
     margin: 0;
     padding: 5px;
-    border: 1px solid #42464d;
-    max-height: 600px;
+    max-height: 550px;
     overflow-y: scroll;
-}
-
-.list__container-caption {
-    display: flex;
-    justify-content: space-around;
 }
 
 .list__container-listbody-table-value-td,
@@ -37,8 +31,7 @@
     list-style-type: none;
     color: #cacaca;
     font-size: 14px;
-    width: 93%;
-
+    padding: 5px;
 }
 
 .list__container-listbody-table-country-td {
@@ -49,10 +42,24 @@
     }
 }
 
+.list__container-listbody-table-value-tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.list__container-tr-caption {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
 .list__container-caption-country-value,
 .list__container-caption-country-name {
     color: #ffffff;
     cursor: pointer;
+    text-align: left;
+    padding: 5px;
 
     &:hover {
         text-decoration: underline;
