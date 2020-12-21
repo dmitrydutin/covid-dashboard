@@ -1,8 +1,13 @@
 import './CovidList.scss';
+import Swiper from 'swiper/bundle';
 import Basic from '../Basic/Basic';
+
 import Store from '../../Store/store';
 import { CRITERIONS } from '../../../../common/constants';
 import { mapAPI } from '../../../api/api';
+import 'swiper/swiper-bundle.css';
+import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
+import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
 
 export default class CovidList extends Basic {
     #data = [];
@@ -20,7 +25,7 @@ export default class CovidList extends Basic {
         covidList.classList.add('covid-list');
 
         Store.subscribeCriterion(this.fillList.bind(this));
-
+        covidList.append(this.renderButtons());
         covidList.append(scaleButton);
         this.fillList();
         return covidList;
@@ -148,5 +153,66 @@ export default class CovidList extends Basic {
         } else {
             throw new Error('List of countries not received');
         }
+    }
+
+    renderButtons() {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+        buttonContainer.classList.add('swiper-container');
+
+        const buttonPrev = document.createElement('img');
+        buttonPrev.classList.add('swiper-button-prev');
+        buttonPrev.classList.add('button-prev');
+        buttonPrev.src = LeftArrow;
+        const buttonNext = document.createElement('img');
+        buttonNext.classList.add('swiper-button-next');
+        buttonNext.classList.add('button-next');
+        buttonNext.src = RightArrow;
+        const swiperWrapper = document.createElement('div');
+        swiperWrapper.classList.add('swiper-wrapper');
+
+        CRITERIONS.forEach((elem) => {
+            const swiperSlide = document.createElement('div');
+            swiperSlide.classList.add('swiper-slide');
+            swiperSlide.textContent = elem.name;
+            swiperWrapper.append(swiperSlide);
+        });
+
+        buttonContainer.append(swiperWrapper);
+        buttonContainer.append(buttonPrev);
+        buttonContainer.append(buttonNext);
+        document.body.append(buttonContainer);
+        const swiper = new Swiper(buttonContainer, {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: buttonNext,
+                prevEl: buttonPrev,
+            },
+        });
+        buttonPrev.addEventListener('transitionEnd', () => {
+            console.log('LIST');
+            this.#changeCriterion(
+                CRITERIONS[swiper.realIndex].value,
+
+            );
+        });
+        buttonNext.addEventListener('click', () => {
+            console.log('LIST');
+            this.#changeCriterion(
+                CRITERIONS[swiper.realIndex].value,
+
+            );
+        });
+        Store.subscribeCriterion((criterion) => {
+            const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
+            swiper.slideTo(index, 250, false);
+        });
+        return buttonContainer;
+    }
+
+    #changeCriterion(name) {
+        Store.criterion = CRITERIONS.find((elem) => elem.value === name);
+        Store.notifyCriterion();
     }
 }
