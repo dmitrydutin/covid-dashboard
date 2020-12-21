@@ -84,13 +84,20 @@ export default class CovidMap extends Basic {
         const swiper = new Swiper(buttonContainer, {
             slidesPerView: 1,
             spaceBetween: 30,
-            loop: true,
             navigation: {
                 nextEl: buttonNext,
                 prevEl: buttonPrev,
             },
         });
-        swiper.on('transitionEnd', () => {
+        buttonPrev.addEventListener('click', () => {
+            console.log('MAP');
+            this.#changeCriterion(
+                mymap, CRITERIONS[swiper.realIndex].value,
+                CRITERIONS[swiper.realIndex].color,
+            );
+        });
+        buttonNext.addEventListener('click', () => {
+            console.log('MAP');
             this.#changeCriterion(
                 mymap, CRITERIONS[swiper.realIndex].value,
                 CRITERIONS[swiper.realIndex].color,
@@ -98,7 +105,7 @@ export default class CovidMap extends Basic {
         });
         Store.subscribeCriterion((criterion) => {
             const index = CRITERIONS.findIndex((elem) => elem.value === criterion.value);
-            swiper.slideTo(index + 1, 250);
+            swiper.slideTo(index, 250, false);
         });
         return buttonContainer;
     }
