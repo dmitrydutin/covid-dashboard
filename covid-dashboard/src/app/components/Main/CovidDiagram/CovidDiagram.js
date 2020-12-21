@@ -68,7 +68,6 @@ export default class CovidDiagram extends Basic {
         await this.getLocaleDataPopulationFromApi();
 
         let diagramClickCounter = 0;
-        const that = this;
         const options = [
             this.createOptions(['#BC0000'], 'Cases', Store.country
                 ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0]),
@@ -178,7 +177,6 @@ export default class CovidDiagram extends Basic {
                                 Store.criterion = CRITERIONS[options
                                     .indexOf(options[diagramClickCounter])];
                                 Store.notifyCriterion();
-                                that.chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         {
@@ -193,7 +191,6 @@ export default class CovidDiagram extends Basic {
                                 Store.criterion = CRITERIONS[options
                                     .indexOf(options[diagramClickCounter])];
                                 Store.notifyCriterion();
-                                that.chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         ],
