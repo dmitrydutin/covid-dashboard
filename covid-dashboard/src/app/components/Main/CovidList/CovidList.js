@@ -198,14 +198,12 @@ export default class CovidList extends Basic {
             },
         });
         buttonPrev.addEventListener('click', () => {
-            console.log('LIST');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
 
             );
         });
         buttonNext.addEventListener('click', () => {
-            console.log('LIST');
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
 
