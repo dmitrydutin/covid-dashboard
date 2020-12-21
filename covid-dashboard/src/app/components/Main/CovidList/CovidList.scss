@@ -1,5 +1,5 @@
-@import '../../../../common/variables.scss';
-@import '../../../../common/mixins.scss';
+@import "../../../../common/variables.scss";
+@import "../../../../common/mixins.scss";
 
 .covid-list {
     grid-area: list;
@@ -11,5 +11,50 @@
 
     &.scale {
         @include block-scale;
+    }
+}
+
+.list__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.list__container-listbody {
+    margin: 0;
+    padding: 5px;
+    border: 1px solid #42464d;
+    max-height: 550px;
+    overflow-y: scroll;
+}
+
+.list__container-caption {
+    display: flex;
+    justify-content: space-around;
+}
+
+.list__container-listbody-table-value-td,
+.list__container-listbody-table-country-td {
+    list-style-type: none;
+    color: #cacaca;
+    font-size: 14px;
+    width: 93%;
+
+}
+
+.list__container-listbody-table-country-td {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.list__container-caption-country-value,
+.list__container-caption-country-name {
+    color: #ffffff;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
     }
 }
