@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 function countryInclude(countries, countryName) {
     return (
         countries.findIndex((country) => {
@@ -9,4 +8,8 @@ function countryInclude(countries, countryName) {
     );
 }
 
-export { countryInclude };
+function excludeCountries(countries, prohibitedCountries) {
+    return countries.filter((country) => !prohibitedCountries.includes(country.country));
+}
+
+export { countryInclude, excludeCountries };
