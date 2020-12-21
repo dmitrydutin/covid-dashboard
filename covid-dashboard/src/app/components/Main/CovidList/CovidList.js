@@ -6,6 +6,7 @@ import { mapAPI } from '../../../api/api';
 
 export default class CovidList extends Basic {
     #data = [];
+    #sortingData = [];
 
     render() {
         const covidList = document.createElement('div');
@@ -41,6 +42,7 @@ export default class CovidList extends Basic {
 
     async buildlist() {
         await this.getAllAPI();
+
         const covidListContainer = document.querySelector('.list__container');
 
         const caption = document.createElement('div');
@@ -92,6 +94,17 @@ export default class CovidList extends Basic {
                     ? Math.round((country.todayRecovered / country.population) * 100000)
                     : 1,
             ];
+            const countryField = country.country;
+            const valueField = criterions[CRITERIONS.indexOf(Store.criterion)] || country.cases;
+            this.#sortingData.push({
+                country: countryField,
+                value: valueField,
+            });
+        });
+
+        this.sortData();
+
+        this.#sortingData.forEach((country) => {
             const tr = document.createElement('tr');
             const valueTd = document.createElement('td');
             const countryTd = document.createElement('td');
@@ -100,15 +113,35 @@ export default class CovidList extends Basic {
             table.append(tr);
             table.append(countryTd);
             table.append(valueTd);
-            valueTd.textContent = criterions[CRITERIONS.indexOf(Store.criterion)] || country.cases;
+            valueTd.textContent = country.value;
             countryTd.textContent = country.country;
         });
+
+        this.addListenersToListOfCountries();
+    }
+
+    addListenersToListOfCountries() {
+        const table = document.querySelector('.list__container-listbody-table');
+        const listener = function (event) {
+            if (event.target.closest('.list__container-listbody-table-country-td') === null) {
+                return;
+            }
+            Store.country = event.target.closest('.list__container-listbody-table-country-td').textContent;
+            Store.notify();
+        };
+        table.removeEventListener('click', listener);
+        table.addEventListener('click', listener);
+    }
+
+    sortData() {
+        this.#sortingData.sort((a, b) => (a.value > b.value ? 1 : -1)).reverse();
     }
 
     async getAllAPI() {
         const response = await mapAPI.getAllData();
         if (response.status === 200) {
             this.#data = response.data;
+            this.#sortingData = [];
         } else {
             throw new Error('List of countries not received');
         }

@@ -36,9 +36,14 @@
 .list__container-listbody-table-country-td {
     list-style-type: none;
     color: #cacaca;
-    cursor: pointer;
     font-size: 14px;
     width: 93%;
+
+}
+
+.list__container-listbody-table-country-td {
+    cursor: pointer;
+
     &:hover {
         text-decoration: underline;
     }
