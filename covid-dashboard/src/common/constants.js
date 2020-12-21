@@ -68,7 +68,7 @@ const EXCLUSION_CONTRIES = [
     'Aruba', 'Palestine', 'Myanmar', 'French Polynesia', 'French Guiana', 'Réunion', 'Guadeloupe', 'Hong Kong', 'Mayotte',
     'Martinique', 'Curaçao', 'Sint Maarten', 'Gibraltar', 'Saint Martin', 'Turks and Caicos Islands', 'Faroe Islands', 'Bermuda',
     'Isle of Man', 'Cayman Islands', 'Caribbean Netherlands', 'St. Barth', 'British Virgin Islands', 'Macao', 'Holy See (Vatican City State)', 'Greenland',
-    'Falkland Islands (Malvinas)', 'Saint Pierre Miquelon', 'Montserrat', 'Anguilla', 'Western Sahara', 'Wallis and Futuna',
+    'Falkland Islands (Malvinas)', 'Saint Pierre Miquelon', 'Montserrat', 'Anguilla', 'Western Sahara', 'Wallis and Futuna', 'Channel Islands',
 ];
 
 export {
