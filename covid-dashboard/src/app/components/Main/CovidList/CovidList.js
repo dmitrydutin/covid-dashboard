@@ -1,8 +1,9 @@
 import './CovidList.scss';
 import Basic from '../Basic/Basic';
 import Store from '../../Store/store';
-import { CRITERIONS } from '../../../../common/constants';
+import { CRITERIONS, EXCLUSION_CONTRIES } from '../../../../common/constants';
 import { mapAPI } from '../../../api/api';
+import { excludeCountries } from '../../../../common/helpers';
 
 export default class CovidList extends Basic {
     #data = [];
@@ -105,6 +106,8 @@ export default class CovidList extends Basic {
         });
 
         this.sortData();
+        this.#sortingData = excludeCountries(this.#sortingData, EXCLUSION_CONTRIES);
+
         this.#isFirstPush = false;
 
         this.#sortingData.forEach((country) => {
@@ -114,8 +117,8 @@ export default class CovidList extends Basic {
             valueTd.classList.add('list__container-listbody-table-value-td');
             countryTd.classList.add('list__container-listbody-table-country-td');
             table.append(tr);
-            table.append(countryTd);
-            table.append(valueTd);
+            tr.append(countryTd);
+            tr.append(valueTd);
             valueTd.textContent = country.value;
             countryTd.textContent = country.country;
         });
