@@ -1,4 +1,3 @@
-/* eslint-disable vars-on-top */
 import './CovidDiagram.scss';
 import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
@@ -9,6 +8,11 @@ import Store from '../../Store/store';
 import { diagramAPI } from '../../../api/api';
 
 export default class CovidDiagram extends Basic {
+    constructor() {
+        super();
+        this.chart = null;
+    }
+
     #globalDataCasesValue = [];
     #globalDataDeathsValue = [];
     #globalDataRecoveredValue = [];
@@ -62,8 +66,9 @@ export default class CovidDiagram extends Basic {
         await this.getGlobalDataFromApi();
         await this.getLocaleDataFromApi();
         await this.getLocaleDataPopulationFromApi();
-        let diagramClickCounter = 0;
 
+        let diagramClickCounter = 0;
+        const that = this;
         const options = [
             this.createOptions(['#BC0000'], 'Cases', Store.country
                 ? this.#localeDataCasesValue[0] : this.#globalDataCasesValue[0]),
@@ -136,7 +141,9 @@ export default class CovidDiagram extends Basic {
                         - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
         ];
 
-        const chart = new ApexCharts(this.#covidDiagramContainer, {
+        this.chart?.destroy();
+
+        this.chart = new ApexCharts(this.#covidDiagramContainer, {
             colors: ['#BC0000'],
             theme: {
                 mode: 'dark',
@@ -171,7 +178,7 @@ export default class CovidDiagram extends Basic {
                                 Store.criterion = CRITERIONS[options
                                     .indexOf(options[diagramClickCounter])];
                                 Store.notifyCriterion();
-                                chart.updateOptions(options[diagramClickCounter]);
+                                that.chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         {
@@ -186,7 +193,7 @@ export default class CovidDiagram extends Basic {
                                 Store.criterion = CRITERIONS[options
                                     .indexOf(options[diagramClickCounter])];
                                 Store.notifyCriterion();
-                                chart.updateOptions(options[diagramClickCounter]);
+                                that.chart.updateOptions(options[diagramClickCounter]);
                             },
                         },
                         ],
@@ -218,9 +225,9 @@ export default class CovidDiagram extends Basic {
             },
         });
 
-        chart.render();
+        this.chart.render();
         if (Store.criterion.name !== 'Total number of cases') {
-            chart.updateOptions(options[CRITERIONS.indexOf(Store.criterion)]);
+            this.chart.updateOptions(options[CRITERIONS.indexOf(Store.criterion)]);
             diagramClickCounter = CRITERIONS.indexOf(Store.criterion);
         }
     }
