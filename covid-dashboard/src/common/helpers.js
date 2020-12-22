@@ -1,4 +1,3 @@
-
 function countryInclude(countries, countryName) {
     return (
         countries.findIndex((country) => {
@@ -30,5 +29,5 @@ function sortData(array, field) {
 }
 
 export {
-    countryInclude, removeDuplicateCountries, excludeCountries, sortData, headerAPI,
+    countryInclude, removeDuplicateCountries, excludeCountries, sortData,
 };
