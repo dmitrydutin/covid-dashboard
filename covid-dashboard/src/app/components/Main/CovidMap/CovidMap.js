@@ -168,7 +168,7 @@ export default class CovidMap extends Basic {
             ACCESS_TOKEN,
         }).setView([0, 50], 2);
 
-        const CartoDBDarkMatter = LeafletMap.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        const CartoDBDarkMatter = LeafletMap.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             subdomains: 'abcd',
             ACCESS_TOKEN,
         });
