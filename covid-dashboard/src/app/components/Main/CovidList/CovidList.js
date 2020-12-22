@@ -14,22 +14,34 @@ export default class CovidList extends Basic {
     #data = [];
     #sortingData = [];
     #isFirstPush = true;
+    #covidList = null;
 
     render() {
-        const covidList = document.createElement('div');
-        const scaleButton = this.createScaleButton(covidList);
+        this.#covidList = document.createElement('div');
+        const scaleButton = this.createScaleButton(this.#covidList);
         const covidListContainer = document.createElement('table');
 
         covidListContainer.classList.add('list__container');
-        covidList.append(covidListContainer);
+        this.#covidList.append(covidListContainer);
 
-        covidList.classList.add('covid-list');
+        this.#covidList.classList.add('covid-list');
 
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
         Store.subscribeCriterion(this.fillList.bind(this));
-        covidList.append(this.renderButtons());
-        covidList.append(scaleButton);
+
+        this.#covidList.append(this.renderButtons());
+        this.#covidList.append(scaleButton);
         this.fillList();
-        return covidList;
+        return this.#covidList;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#covidList.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#covidList.classList.remove('light');
+        }
     }
 
     fillList() {

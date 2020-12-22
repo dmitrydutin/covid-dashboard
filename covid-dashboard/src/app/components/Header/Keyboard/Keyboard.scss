@@ -26,8 +26,15 @@
 
     @media (max-width: 920px) {
         width: 100%;
+        left: 0;
+        bottom: 0;
+
         border-radius: 0;
         row-gap: 0.97875vw;
+
+        &--hidden {
+            bottom: -100%;
+        }
     }
 }
 

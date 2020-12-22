@@ -28,6 +28,8 @@ LeafletMap.Icon.Default.mergeOptions({
 });
 
 export default class CovidMap extends Basic {
+    #covidMapContainer = null;
+
     constructor() {
         super();
         this.mapMarkers = LeafletMap.layerGroup();
@@ -133,10 +135,22 @@ export default class CovidMap extends Basic {
         this.mapMarkers.addTo(mymap);
     }
 
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#covidMapContainer.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#covidMapContainer.classList.remove('light');
+        }
+    }
+
     render() {
         const covidMapContainer = document.createElement('div');
         const covidMap = document.createElement('div');
         const scaleButton = this.createScaleButton(covidMapContainer);
+
+        this.#covidMapContainer = covidMapContainer;
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
 
         covidMapContainer.classList.add('covid-map-container');
         covidMapContainer.append(covidMap);

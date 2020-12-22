@@ -9,6 +9,11 @@
     border: 1px solid $primary-border-color;
     background-color: $primary-color;
 
+    &.light {
+        border: 1px solid $primary-border-color-light;
+        background-color: $primary-color-light;
+    }
+
     &.scale {
         @include block-scale;
     }

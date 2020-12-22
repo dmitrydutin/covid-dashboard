@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-@import './common/variables.scss';
 
 html {
     box-sizing: border-box;
@@ -35,5 +34,4 @@ p {
 
 body {
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-    background-color: $secondary-color;
 }

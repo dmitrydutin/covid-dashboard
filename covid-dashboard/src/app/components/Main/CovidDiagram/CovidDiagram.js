@@ -13,6 +13,7 @@ export default class CovidDiagram extends Basic {
         this.chart = null;
     }
 
+    #covidDiagram = null;
     #globalDataCasesValue = [];
     #globalDataDeathsValue = [];
     #globalDataRecoveredValue = [];
@@ -24,21 +25,32 @@ export default class CovidDiagram extends Basic {
     #dataDate = [];
 
     render() {
-        const covidDiagram = document.createElement('div');
+        this.#covidDiagram = document.createElement('div');
         this.#covidDiagramContainer = document.createElement('div');
-        const scaleButton = this.createScaleButton(covidDiagram);
+        const scaleButton = this.createScaleButton(this.#covidDiagram);
 
-        covidDiagram.classList.add('covid-diagram');
+        this.#covidDiagram.classList.add('covid-diagram');
         this.#covidDiagramContainer.classList.add('covid-diagram__container');
 
         this.fillDiagram();
         Store.subscribe(this.fillDiagram.bind(this));
         Store.subscribeCriterion(this.fillDiagram.bind(this));
 
-        covidDiagram.append(this.#covidDiagramContainer);
-        covidDiagram.append(scaleButton);
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
 
-        return covidDiagram;
+        this.#covidDiagram.append(this.#covidDiagramContainer);
+        this.#covidDiagram.append(scaleButton);
+
+        return this.#covidDiagram;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#covidDiagram.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#covidDiagram.classList.remove('light');
+        }
     }
 
     fillDiagram() {
