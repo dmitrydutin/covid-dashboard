@@ -144,7 +144,9 @@ export default class CovidTable extends Basic {
         CRITERIONS.forEach((elem) => {
             const swiperSlide = document.createElement('div');
             swiperSlide.classList.add('swiper-slide');
-            swiperSlide.textContent = elem.name;
+            const swiperSlideText = document.createElement('span');
+            swiperSlideText.textContent = elem.name;
+            swiperSlide.append(swiperSlideText);
             swiperWrapper.append(swiperSlide);
         });
 
@@ -159,6 +161,7 @@ export default class CovidTable extends Basic {
                 nextEl: buttonNext,
                 prevEl: buttonPrev,
             },
+            allowTouchMove: false,
         });
         buttonPrev.addEventListener('click', () => {
             this.#changeCriterion(
