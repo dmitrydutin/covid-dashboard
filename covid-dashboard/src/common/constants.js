@@ -25,7 +25,7 @@ const CRITERIONS = [
     {
         name: 'Number of deaths in the last day',
         value: 'todayDeaths',
-        color: '#B5B800',
+        color: '#9000ff',
     },
     {
         name: 'Number of recoveries in the last day',
@@ -35,7 +35,7 @@ const CRITERIONS = [
     {
         name: 'Number of cases per 100 thousand population',
         value: 'casesPer100K',
-        color: '#4B0000',
+        color: '#FF1493',
     },
     {
         name: 'Number of deaths per 100 thousand population',
@@ -45,7 +45,7 @@ const CRITERIONS = [
     {
         name: 'Number of recoveries per 100 thousand population',
         value: 'recoveredPer100K',
-        color: '#002582',
+        color: '#34ebe5',
     },
     {
         name: 'Number of cases per 100 thousand population in the last day',
@@ -55,7 +55,7 @@ const CRITERIONS = [
     {
         name: 'Number of deaths per 100 thousand population in the last day',
         value: 'todayDeathsPer100K',
-        color: '#727317',
+        color: '#FFA500',
     },
     {
         name: 'Number of recoveries per 100 thousand population in the last day',

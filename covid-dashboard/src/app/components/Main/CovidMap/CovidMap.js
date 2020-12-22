@@ -73,7 +73,9 @@ export default class CovidMap extends Basic {
         CRITERIONS.forEach((elem) => {
             const swiperSlide = document.createElement('div');
             swiperSlide.classList.add('swiper-slide');
-            swiperSlide.textContent = elem.name;
+            const swiperSlideText = document.createElement('span');
+            swiperSlideText.textContent = elem.name;
+            swiperSlide.append(swiperSlideText);
             swiperWrapper.append(swiperSlide);
         });
 
@@ -88,6 +90,7 @@ export default class CovidMap extends Basic {
                 nextEl: buttonNext,
                 prevEl: buttonPrev,
             },
+            allowTouchMove: false,
         });
         buttonPrev.addEventListener('click', () => {
             this.#changeCriterion(
@@ -151,7 +154,7 @@ export default class CovidMap extends Basic {
             ACCESS_TOKEN,
         }).setView([0, 50], 2);
 
-        const CartoDBDarkMatter = LeafletMap.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const CartoDBDarkMatter = LeafletMap.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
             subdomains: 'abcd',
             ACCESS_TOKEN,
         });
@@ -266,9 +269,9 @@ export default class CovidMap extends Basic {
             }
             function style() {
                 return {
-                    weight: 3,
+                    weight: 1,
                     opacity: 1,
-                    color: '#81858c',
+                    color: '#ffff',
                     fillColor: '#81858c',
                 };
             }
