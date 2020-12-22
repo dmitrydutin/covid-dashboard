@@ -23,4 +23,11 @@ function excludeCountries(countries, prohibitedCountries) {
     );
 }
 
-export { countryInclude, removeDuplicateCountries, excludeCountries };
+function sortData(array, field) {
+    array.sort((a, b) => (a[field] > b[field] ? 1 : -1)).reverse();
+    return array;
+}
+
+export {
+    countryInclude, removeDuplicateCountries, excludeCountries, sortData,
+};
