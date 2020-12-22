@@ -1,8 +1,10 @@
 import './CovidDiagram.scss';
 import ApexCharts from 'apexcharts';
 import Basic from '../Basic/Basic';
-import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
-import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
+import LeftArrowLight from '../../../../assets/images/left-arrow-diagram.svg';
+import RightArrowLight from '../../../../assets/images/right-arrow-diagram.svg';
+import LeftArrowDark from '../../../../assets/images/left-arrow-diagram-dark.svg';
+import RightArrowDark from '../../../../assets/images/right-arrow-diagram-dark.svg';
 import { DIAGRAM_WORD_POPULATION, CRITERIONS } from '../../../../common/constants';
 import Store from '../../Store/store';
 import { diagramAPI } from '../../../api/api';
@@ -38,6 +40,7 @@ export default class CovidDiagram extends Basic {
 
         this.#setThemeMode();
         Store.subscribeTheme(this.#setThemeMode.bind(this));
+        Store.subscribeTheme(this.fillDiagram.bind(this));
 
         this.#covidDiagram.append(this.#covidDiagramContainer);
         this.#covidDiagram.append(scaleButton);
@@ -157,7 +160,7 @@ export default class CovidDiagram extends Basic {
         this.chart = new ApexCharts(this.#covidDiagramContainer, {
             colors: ['#BC0000'],
             theme: {
-                mode: 'dark',
+                mode: Store.theme,
             },
             chart: {
                 animations: {
@@ -178,7 +181,7 @@ export default class CovidDiagram extends Basic {
                         pan: false,
                         reset: false,
                         customIcons: [{
-                            icon: `<img src=${LeftArrow} width="17">`,
+                            icon: `<img src=${Store.theme === 'dark' ? LeftArrowLight : LeftArrowDark} width="17">`,
                             title: 'Prev',
                             class: 'prev-category-icon',
                             click() {
@@ -192,7 +195,7 @@ export default class CovidDiagram extends Basic {
                             },
                         },
                         {
-                            icon: `<img src=${RightArrow} width="17">`,
+                            icon: `<img src=${Store.theme === 'dark' ? RightArrowLight : RightArrowDark} width="17">`,
                             title: 'Next',
                             class: 'next-category-icon',
                             click() {
@@ -217,7 +220,7 @@ export default class CovidDiagram extends Basic {
                     fontSize: '14px',
                     fontWeight: 'bold',
                     fontFamily: 'Roboto',
-                    color: '#ffffff',
+                    color: Store.theme === 'dark' ? '#ffffff' : '#000000',
                 },
             },
             dataLabels: {

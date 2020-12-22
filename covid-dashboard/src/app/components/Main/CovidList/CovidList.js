@@ -26,21 +26,42 @@ export default class CovidList extends Basic {
 
         this.#covidList.classList.add('covid-list');
 
-        this.#setThemeMode();
         Store.subscribeTheme(this.#setThemeMode.bind(this));
         Store.subscribeCriterion(this.fillList.bind(this));
 
         this.#covidList.append(this.renderButtons());
         this.#covidList.append(scaleButton);
         this.fillList();
+        this.#setThemeMode();
         return this.#covidList;
     }
 
     #setThemeMode() {
+        const tdCountries = document.querySelectorAll('.list__container-listbody-table-country-td');
+        const tdValues = document.querySelectorAll('.list__container-listbody-table-value-td');
+        const captionCountry = document.querySelector('.list__container-caption-country-name');
+        const captionValue = document.querySelector('.list__container-caption-country-value');
+
         if (Store.theme === 'light') {
             this.#covidList.classList.add('light');
+            captionCountry?.classList.remove('dark');
+            captionValue?.classList.remove('dark');
+            tdCountries.forEach((country) => {
+                country.classList.remove('dark');
+            });
+            tdValues.forEach((value) => {
+                value.classList.remove('dark');
+            });
         } else if (Store.theme === 'dark') {
+            captionCountry.classList.add('dark');
+            captionValue.classList.add('dark');
             this.#covidList.classList.remove('light');
+            tdCountries.forEach((country) => {
+                country.classList.add('dark');
+            });
+            tdValues.forEach((value) => {
+                value.classList.add('dark');
+            });
         }
     }
 
