@@ -34,7 +34,7 @@
 .list__container-listbody-table-value-td,
 .list__container-listbody-table-country-td {
     list-style-type: none;
-    color: #cacaca;
+    color: #000000;
     font-size: 14px;
     padding: 5px;
 }
@@ -61,7 +61,7 @@
 
 .list__container-caption-country-value,
 .list__container-caption-country-name {
-    color: #ffffff;
+    color: #000000;
     cursor: pointer;
     text-align: left;
     padding: 5px;
@@ -69,6 +69,14 @@
     &:hover {
         text-decoration: underline;
     }
+}
+
+.dark {
+    color: #cacaca;
+}
+
+.light {
+    color: #000000;
 }
 
 .list__container-listbody-table-flag-img {
