@@ -14,8 +14,8 @@
     background-color: $primary-color;
 
     &.light {
-        border-top: 1px solid #e0e0e0;
-        background-color: #f5f5f5;
+        border-top: 1px solid $primary-border-color-light;
+        background-color: $primary-background-color-light;
     }
 
     &__inner {
@@ -40,6 +40,10 @@
             &__name {
                 color: $primary-text-color;
                 @include footer-logo;
+
+                &.light {
+                    color: $primary-text-color-light;
+                }
             }
         }
 
@@ -67,6 +71,10 @@
 
                 color: $primary-text-color;
                 @include h2;
+
+                &.light {
+                   color: $primary-text-color-light;
+                }
             }
 
             &__link {
@@ -77,6 +85,10 @@
 
                 &:hover {
                     text-decoration: underline;
+                }
+
+                &.light {
+                    color: $secondary-text-color-light;
                 }
             }
         }
@@ -92,6 +104,10 @@
         &__copyright {
             color: $secondary-text-color;
             @include h3;
+
+            &.light {
+                color: $secondary-text-color-light;
+            }
         }
 
         &__course {

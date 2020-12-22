@@ -12,6 +12,8 @@ import { CRITERIONS } from '../../../../common/constants';
 import { mapAPI, tableAPI } from '../../../api/api';
 
 export default class CovidTable extends Basic {
+    #covidTable = null;
+
     constructor() {
         super();
         this.table = null;
@@ -19,16 +21,16 @@ export default class CovidTable extends Basic {
     }
 
     render() {
-        const covidTable = document.createElement('div');
-        const scaleButton = this.createScaleButton(covidTable);
+        this.#covidTable = document.createElement('div');
+        const scaleButton = this.createScaleButton(this.#covidTable);
 
-        covidTable.classList.add('covid-table');
+        this.#covidTable.classList.add('covid-table');
 
-        covidTable.append(scaleButton);
+        this.#covidTable.append(scaleButton);
 
         const tableContainer = document.createElement('div');
         tableContainer.classList.add('statistics-table-container');
-        covidTable.append(tableContainer);
+        this.#covidTable.append(tableContainer);
 
         const table = document.createElement('table');
         this.table = table;
@@ -38,12 +40,23 @@ export default class CovidTable extends Basic {
             this.renderTable();
         });
 
+        this.#setThemeMode();
+        Store.subscribeTheme(this.#setThemeMode.bind(this));
+
         const buttonsContainer = document.createElement('div');
         buttonsContainer.classList.add('statistics-button-container');
         buttonsContainer.append(this.renderButtons());
-        covidTable.append(buttonsContainer);
+        this.#covidTable.append(buttonsContainer);
 
-        return covidTable;
+        return this.#covidTable;
+    }
+
+    #setThemeMode() {
+        if (Store.theme === 'light') {
+            this.#covidTable.classList.add('light');
+        } else if (Store.theme === 'dark') {
+            this.#covidTable.classList.remove('light');
+        }
     }
 
     renderTable() {

@@ -1,5 +1,5 @@
 class Store {
-    #theme = 'dark';
+    #theme = 'light';
     #country = null;
     #criterion = {
         name: 'Total number of cases',

@@ -15,6 +15,11 @@
     &.scale {
         @include block-scale;
     }
+
+    &.light {
+        border: 1px solid $primary-border-color-light;
+        background-color: $primary-color-light;
+    }
 }
 
 #mapid {

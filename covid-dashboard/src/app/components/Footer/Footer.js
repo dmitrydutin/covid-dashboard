@@ -3,6 +3,15 @@ import Store from '../Store/store';
 
 export default class Footer {
     #footer = null;
+    #companyName = null;
+    #authorsInfoTitle = null;
+    #firstAuthor = null;
+    #secondAuthor = null;
+    #thirdAuthor = null;
+    #gratitudeInfoTitle = null;
+    #gratitudeInfoMentor = null;
+    #gratitudeInfoSchool = null;
+    #copyright = null;
 
     render() {
         this.#footer = document.createElement('footer');
@@ -29,8 +38,26 @@ export default class Footer {
     #setThemeMode() {
         if (Store.theme === 'light') {
             this.#footer.classList.add('light');
+            this.#companyName.classList.add('light');
+            this.#authorsInfoTitle.classList.add('light');
+            this.#firstAuthor.classList.add('light');
+            this.#secondAuthor.classList.add('light');
+            this.#thirdAuthor.classList.add('light');
+            this.#gratitudeInfoTitle.classList.add('light');
+            this.#gratitudeInfoMentor.classList.add('light');
+            this.#gratitudeInfoSchool.classList.add('light');
+            this.#copyright.classList.add('light');
         } else if (Store.theme === 'dark') {
             this.#footer.classList.remove('light');
+            this.#companyName.classList.remove('light');
+            this.#authorsInfoTitle.classList.remove('light');
+            this.#firstAuthor.classList.remove('light');
+            this.#secondAuthor.classList.remove('light');
+            this.#thirdAuthor.classList.remove('light');
+            this.#gratitudeInfoTitle.classList.remove('light');
+            this.#gratitudeInfoMentor.classList.remove('light');
+            this.#gratitudeInfoSchool.classList.remove('light');
+            this.#copyright.classList.remove('light');
         }
     }
 
@@ -49,20 +76,14 @@ export default class Footer {
 
     #createFooterTopCompany() {
         const company = document.createElement('div');
-        const companyName = this.#createCompanyName();
+        this.#companyName = document.createElement('h2');
 
         company.classList.add('footer__top__company');
+        this.#companyName.classList.add('footer__top__company__name');
+        this.#companyName.textContent = 'Covid dashboard';
 
-        company.append(companyName);
+        company.append(this.#companyName);
         return company;
-    }
-
-    #createCompanyName() {
-        const companyName = document.createElement('h2');
-        companyName.classList.add('footer__top__company__name');
-        companyName.textContent = 'Covid dashboard';
-
-        return companyName;
     }
 
     #createFooterTopContent() {
@@ -80,81 +101,81 @@ export default class Footer {
 
     #createAuthorsInfo() {
         const authorsInfo = document.createElement('div');
-        const authorsInfoTitle = document.createElement('h2');
-        const firstAuthor = document.createElement('a');
-        const secondAuthor = document.createElement('a');
-        const thirdAuthor = document.createElement('a');
+        this.#authorsInfoTitle = document.createElement('h2');
+        this.#firstAuthor = document.createElement('a');
+        this.#secondAuthor = document.createElement('a');
+        this.#thirdAuthor = document.createElement('a');
 
         authorsInfo.classList.add('footer__top__content__container');
-        authorsInfoTitle.classList.add('footer__top__content__title');
-        firstAuthor.classList.add('footer__top__content__link');
-        secondAuthor.classList.add('footer__top__content__link');
-        thirdAuthor.classList.add('footer__top__content__link');
+        this.#authorsInfoTitle.classList.add('footer__top__content__title');
+        this.#firstAuthor.classList.add('footer__top__content__link');
+        this.#secondAuthor.classList.add('footer__top__content__link');
+        this.#thirdAuthor.classList.add('footer__top__content__link');
 
-        authorsInfoTitle.textContent = 'Team';
-        firstAuthor.textContent = 'Dmitry Dutin';
-        secondAuthor.textContent = 'Maxim Rynkov';
-        thirdAuthor.textContent = 'Yaraslau Kabernik-Berazouski';
+        this.#authorsInfoTitle.textContent = 'Team';
+        this.#firstAuthor.textContent = 'Dmitry Dutin';
+        this.#secondAuthor.textContent = 'Maxim Rynkov';
+        this.#thirdAuthor.textContent = 'Yaraslau Kabernik-Berazouski';
 
-        firstAuthor.href = 'https://github.com/dmitrydutin';
-        secondAuthor.href = 'https://github.com/maximzmei';
-        thirdAuthor.href = 'https://github.com/asbarn';
+        this.#firstAuthor.href = 'https://github.com/dmitrydutin';
+        this.#secondAuthor.href = 'https://github.com/maximzmei';
+        this.#thirdAuthor.href = 'https://github.com/asbarn';
 
-        firstAuthor.target = '_blank';
-        secondAuthor.target = '_blank';
-        thirdAuthor.target = '_blank';
+        this.#firstAuthor.target = '_blank';
+        this.#secondAuthor.target = '_blank';
+        this.#thirdAuthor.target = '_blank';
 
-        authorsInfo.append(authorsInfoTitle);
-        authorsInfo.append(firstAuthor);
-        authorsInfo.append(secondAuthor);
-        authorsInfo.append(thirdAuthor);
+        authorsInfo.append(this.#authorsInfoTitle);
+        authorsInfo.append(this.#firstAuthor);
+        authorsInfo.append(this.#secondAuthor);
+        authorsInfo.append(this.#thirdAuthor);
 
         return authorsInfo;
     }
 
     #createGratitudeInfo() {
         const gratitudeInfo = document.createElement('div');
-        const gratitudeInfoTitle = document.createElement('h2');
-        const gratitudeInfoMentor = document.createElement('a');
-        const gratitudeInfoSchool = document.createElement('a');
+        this.#gratitudeInfoTitle = document.createElement('h2');
+        this.#gratitudeInfoMentor = document.createElement('a');
+        this.#gratitudeInfoSchool = document.createElement('a');
 
         gratitudeInfo.classList.add('footer__top__content__container');
-        gratitudeInfoTitle.classList.add('footer__top__content__title');
-        gratitudeInfoMentor.classList.add('footer__top__content__link');
-        gratitudeInfoSchool.classList.add('footer__top__content__link');
+        this.#gratitudeInfoTitle.classList.add('footer__top__content__title');
+        this.#gratitudeInfoMentor.classList.add('footer__top__content__link');
+        this.#gratitudeInfoSchool.classList.add('footer__top__content__link');
 
-        gratitudeInfoTitle.textContent = 'Gratitude';
-        gratitudeInfoMentor.textContent = 'Alexander';
-        gratitudeInfoSchool.textContent = 'RSS';
+        this.#gratitudeInfoTitle.textContent = 'Gratitude';
+        this.#gratitudeInfoMentor.textContent = 'Alexander';
+        this.#gratitudeInfoSchool.textContent = 'RSS';
 
-        gratitudeInfoMentor.href = 'https://github.com/noway36';
-        gratitudeInfoSchool.href = 'https://rs.school/';
+        this.#gratitudeInfoMentor.href = 'https://github.com/noway36';
+        this.#gratitudeInfoSchool.href = 'https://rs.school/';
 
-        gratitudeInfoMentor.target = '_blank';
-        gratitudeInfoSchool.target = '_blank';
+        this.#gratitudeInfoMentor.target = '_blank';
+        this.#gratitudeInfoSchool.target = '_blank';
 
-        gratitudeInfo.append(gratitudeInfoTitle);
-        gratitudeInfo.append(gratitudeInfoMentor);
-        gratitudeInfo.append(gratitudeInfoSchool);
+        gratitudeInfo.append(this.#gratitudeInfoTitle);
+        gratitudeInfo.append(this.#gratitudeInfoMentor);
+        gratitudeInfo.append(this.#gratitudeInfoSchool);
 
         return gratitudeInfo;
     }
 
     #createFooterBottom() {
         const footerBottom = document.createElement('div');
-        const copyright = document.createElement('p');
+        this.#copyright = document.createElement('p');
         const courseInfo = document.createElement('a');
 
         footerBottom.classList.add('footer__bottom');
-        copyright.classList.add('footer__bottom__copyright');
+        this.#copyright.classList.add('footer__bottom__copyright');
         courseInfo.classList.add('footer__bottom__course');
 
-        copyright.textContent = 'Made with ️❤ in Belarus © 2020';
+        this.#copyright.textContent = 'Made with ️❤ in Belarus © 2020';
 
         courseInfo.href = 'https://rs.school/js/';
         courseInfo.target = '_blank';
 
-        footerBottom.append(copyright);
+        footerBottom.append(this.#copyright);
         footerBottom.append(courseInfo);
 
         return footerBottom;

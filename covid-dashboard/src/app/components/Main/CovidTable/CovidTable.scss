@@ -9,6 +9,11 @@
     border: 1px solid $primary-border-color;
     background-color: $primary-color;
 
+    &.light {
+        border: 1px solid $primary-border-color-light;
+        background-color: $primary-color-light;
+    }
+
     &.scale {
         @include block-scale;
     }
@@ -24,6 +29,10 @@
             font-size: 20px;
             text-align: center;
 
+            .statistics-table-tr {
+                background-color: $primary-color;
+            }
+
             .statistics-table-th {
                 background-color: $map-button-background-color;
                 border: 3px solid $map-button-background-color;
@@ -37,8 +46,6 @@
     }
 }
 
-
-
 @media (max-width: 700px) {
     .statistics-table {
         font-size: 15px;
@@ -48,5 +55,3 @@
         padding: 0;
     }
 }
-
-

@@ -15,7 +15,7 @@
     @include block-shadow;
 
     &.light {
-        background-color: $primary-color-light;
+        background-color: $header-color-light;
         @include block-shadow-light;
     }
 
@@ -62,7 +62,7 @@
             border: 1px solid $secondary-border-color-light;
 
             &::placeholder {
-                color: $primary-text-color-light;
+                color: $header-text-color-light;
             }
 
             &:hover {

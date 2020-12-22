@@ -10,16 +10,13 @@ export default class Main {
 
     render() {
         this.#main = document.createElement('main');
-        const container = document.createElement('div');
         const mainInner = document.createElement('div');
-
         const covidList = new CovidList().render();
         const covidMap = new CovidMap().render();
         const covidTable = new CovidTable().render();
         const covidDiagram = new CovidDiagram().render();
 
         this.#main.classList.add('main');
-        container.classList.add('main__container');
         mainInner.classList.add('main__inner');
 
         this.#setThemeMode();
@@ -29,9 +26,7 @@ export default class Main {
         mainInner.append(covidMap);
         mainInner.append(covidTable);
         mainInner.append(covidDiagram);
-
-        container.append(mainInner);
-        this.#main.append(container);
+        this.#main.append(mainInner);
 
         return this.#main;
     }
