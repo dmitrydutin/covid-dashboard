@@ -8,7 +8,7 @@ import { mapAPI } from '../../../api/api';
 import 'swiper/swiper-bundle.css';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
-import { excludeCountries } from '../../../../common/helpers';
+import { excludeCountries, sortData } from '../../../../common/helpers';
 
 export default class CovidList extends Basic {
     #data = [];
@@ -146,7 +146,7 @@ export default class CovidList extends Basic {
             });
         });
 
-        this.sortData();
+        sortData(this.#sortingData, 'value');
         this.#sortingData = excludeCountries(this.#sortingData, EXCLUSION_CONTRIES);
 
         this.#isFirstPush = false;
@@ -193,10 +193,6 @@ export default class CovidList extends Basic {
         };
         table.removeEventListener('click', listener);
         table.addEventListener('click', listener);
-    }
-
-    sortData() {
-        this.#sortingData.sort((a, b) => (a.value > b.value ? 1 : -1)).reverse();
     }
 
     async getAllAPI() {
