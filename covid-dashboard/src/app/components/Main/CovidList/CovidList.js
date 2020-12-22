@@ -53,9 +53,9 @@ export default class CovidList extends Basic {
                 value.classList.remove('dark');
             });
         } else if (Store.theme === 'dark') {
+            this.#covidList.classList.remove('light');
             captionCountry.classList.add('dark');
             captionValue.classList.add('dark');
-            this.#covidList.classList.remove('light');
             tdCountries.forEach((country) => {
                 country.classList.add('dark');
             });
@@ -159,6 +159,17 @@ export default class CovidList extends Basic {
             tr.classList.add('list__container-listbody-table-value-tr');
             valueTd.classList.add('list__container-listbody-table-value-td');
             countryTd.classList.add('list__container-listbody-table-country-td');
+            if (Store.theme === 'dark') {
+                valueTd.classList.add('dark');
+                countryTd.classList.add('dark');
+                captionCountryName.classList.add('dark');
+                captionValue.classList.add('dark');
+            } else {
+                valueTd.classList.remove('dark');
+                countryTd.classList.remove('dark');
+                captionCountryName.classList.remove('dark');
+                captionValue.classList.remove('dark');
+            }
 
             valueTd.textContent = country.value;
             countryTd.innerHTML = `<img class="list__container-listbody-table-flag-img" src="${country.flag}">${country.country}`;
