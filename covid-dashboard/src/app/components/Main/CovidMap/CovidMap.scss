@@ -46,14 +46,11 @@
 }
 
 .swiper-container {
-    width: 525px;
+    width: 370px;
     height: 50px;
     margin: auto;
-    padding: 10px;
+    padding: 0 10px 10px;
 
-    @media (max-width: 1200px) {
-        width: 450px;
-    }
 
 
 
@@ -61,7 +58,7 @@
     .button-prev {
         color: black;
         height: 50%;
-        top: 78%;
+        top: 60%;
     }
 
     .button-next {
@@ -73,6 +70,7 @@
     }
 
     .swiper-slide {
+        width: 80%;
         height: 40px;
         text-align: center;
         font-size: 15px;
@@ -93,6 +91,10 @@
         -webkit-align-items: center;
         align-items: center;
 
+        span {
+            margin: 0 40px;
+            display: block;
+        }
 
 
         @media (max-width: 1200px) {

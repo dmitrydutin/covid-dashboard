@@ -104,9 +104,12 @@ export default class CovidList extends Basic {
             const countryField = country.country;
             const valueField = criterions[CRITERIONS.indexOf(Store.criterion)];
             const valueCasesField = country.cases;
+            const flagField = country.countryInfo.flag;
+
             this.#sortingData.push({
                 country: countryField,
                 value: this.#isFirstPush ? valueCasesField : valueField,
+                flag: flagField,
             });
         });
 
@@ -125,7 +128,7 @@ export default class CovidList extends Basic {
             countryTd.classList.add('list__container-listbody-table-country-td');
 
             valueTd.textContent = country.value;
-            countryTd.textContent = country.country;
+            countryTd.innerHTML = `<img class="list__container-listbody-table-flag-img" src="${country.flag}">${country.country}`;
 
             listbody.append(tr);
             tr.append(countryTd);
@@ -181,7 +184,9 @@ export default class CovidList extends Basic {
         CRITERIONS.forEach((elem) => {
             const swiperSlide = document.createElement('div');
             swiperSlide.classList.add('swiper-slide');
-            swiperSlide.textContent = elem.name;
+            const swiperSlideText = document.createElement('span');
+            swiperSlideText.textContent = elem.name;
+            swiperSlide.append(swiperSlideText);
             swiperWrapper.append(swiperSlide);
         });
 
@@ -196,17 +201,16 @@ export default class CovidList extends Basic {
                 nextEl: buttonNext,
                 prevEl: buttonPrev,
             },
+            allowTouchMove: false,
         });
         buttonPrev.addEventListener('click', () => {
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
-
             );
         });
         buttonNext.addEventListener('click', () => {
             this.#changeCriterion(
                 CRITERIONS[swiper.realIndex].value,
-
             );
         });
         Store.subscribeCriterion((criterion) => {

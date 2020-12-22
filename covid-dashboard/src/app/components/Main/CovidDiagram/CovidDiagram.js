@@ -82,7 +82,7 @@ export default class CovidDiagram extends Basic {
                 : this.#globalDataCasesValue[0]
                     .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                         - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#B5B800'], 'Daily Deaths', Store.country
+            this.createOptions(['#9000ff'], 'Daily Deaths', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
                         - this.#localeDataDeathsValue[0][index]).map((el) => Math.abs(el))
@@ -96,7 +96,7 @@ export default class CovidDiagram extends Basic {
                 : this.#globalDataRecoveredValue[0]
                     .map((el, index) => this.#globalDataRecoveredValue[0][index + 1]
                         - this.#globalDataRecoveredValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#4B0000'], 'Cases/100K', Store.country
+            this.createOptions(['#FF1493'], 'Cases/100K', Store.country
                 ? this.#localeDataCasesValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataCasesValue[0]
@@ -106,7 +106,7 @@ export default class CovidDiagram extends Basic {
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataDeathsValue[0]
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))),
-            this.createOptions(['#002582'], 'Recovered/100K', Store.country
+            this.createOptions(['#34ebe5'], 'Recovered/100K', Store.country
                 ? this.#localeDataRecoveredValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                 : this.#globalDataRecoveredValue[0]
@@ -120,7 +120,7 @@ export default class CovidDiagram extends Basic {
                     .map((el) => Math.round((el / DIAGRAM_WORD_POPULATION) * 1000000))
                     .map((el, index) => this.#globalDataCasesValue[0][index + 1]
                         - this.#globalDataCasesValue[0][index]).map((el) => Math.abs(el))),
-            this.createOptions(['#727317'], 'Daily Deaths/100K', Store.country
+            this.createOptions(['#FFA500'], 'Daily Deaths/100K', Store.country
                 ? this.#localeDataDeathsValue[0]
                     .map((el) => Math.round((el / this.#localeDataPopulation) * 1000000))
                     .map((el, index) => this.#localeDataDeathsValue[0][index + 1]
