@@ -47,6 +47,7 @@
     .active-button {
         border-bottom: 3px solid #ffff;
         background-color: $map-button-background-color-active;
+
     }
 }
 
@@ -101,12 +102,22 @@
             display: block;
         }
 
-
         @media (max-width: 1200px) {
             font-size: 12px;
         }
     }
 }
+
+
+
+.light {
+    .swiper-slide {
+        background-color: $header-color-light;
+        border-bottom: 3px solid $map-button-background-color-active;
+        color: $primary-color;
+    }
+}
+
 
 .info {
     padding: 6px 8px;

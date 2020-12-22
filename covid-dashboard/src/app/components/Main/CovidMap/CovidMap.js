@@ -172,8 +172,26 @@ export default class CovidMap extends Basic {
             subdomains: 'abcd',
             ACCESS_TOKEN,
         });
-
-        CartoDBDarkMatter.addTo(mymap);
+        const CartoDBDarkMatterLight = LeafletMap.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            subdomains: 'abcd',
+            apikey: ACCESS_TOKEN,
+        });
+        if (Store.theme === 'light') {
+            CartoDBDarkMatterLight.addTo(mymap);
+        } else if (Store.theme === 'dark') {
+            CartoDBDarkMatter.addTo(mymap);
+        }
+        Store.subscribeTheme(
+            (theme) => {
+                if (theme === 'light') {
+                    mymap.removeLayer(CartoDBDarkMatter);
+                    CartoDBDarkMatterLight.addTo(mymap);
+                } else if (theme === 'dark') {
+                    mymap.removeLayer(CartoDBDarkMatterLight);
+                    CartoDBDarkMatter.addTo(mymap);
+                }
+            },
+        );
 
         setInterval(() => {
             mymap.invalidateSize();
