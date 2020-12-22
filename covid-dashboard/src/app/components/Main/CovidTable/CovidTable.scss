@@ -12,6 +12,25 @@
     &.light {
         border: 1px solid $primary-border-color-light;
         background-color: $primary-color-light;
+        .statistics-table-container {
+
+            .statistics-table {
+                color:$primary-color;
+                .statistics-table-tr {
+                    background-color: $primary-background-color-light;
+                }
+
+                .statistics-table-th {
+                    background-color: $header-color-light;
+                    border: 3px solid $header-color-light;
+                }
+
+                .statistics-table-td {
+                    padding: 5px;
+                    border: 3px solid $header-color-light;
+                }
+            }
+        }
     }
 
     &.scale {
@@ -45,6 +64,8 @@
         }
     }
 }
+
+
 
 @media (max-width: 700px) {
     .statistics-table {
