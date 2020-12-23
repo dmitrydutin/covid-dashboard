@@ -1,4 +1,7 @@
-import { countryInclude, removeDuplicateCountries, sortData } from '../common/helpers';
+import {
+    countryInclude, removeDuplicateCountries,
+    sortData, convertCountryName, addCriterions,
+} from '../common/helpers';
 
 const countries = [
     { country: 'Afghanistan' },
@@ -93,7 +96,79 @@ const sortedDataByValue = [
     { country: 'Austria', value: 8513 },
     { country: 'Angola', value: 2525 },
 ];
+const fetchedCountries = [
+    {
+        cases: 155440,
+        country: 'Armenia',
+        deaths: 2691,
+        population: 2965893,
+        recovered: 135638,
+        todayCases: 838,
+        todayDeaths: 18,
+        todayRecovered: 1052,
+    },
+    {
+        cases: 32399,
+        country: 'Uganda',
+        deaths: 245,
+        population: 46415146,
+        recovered: 10731,
+        todayCases: 489,
+        todayDeaths: 7,
+        todayRecovered: 85,
+    }];
+const changedCountries = [
+    {
+        cases: 155440,
+        casesPer100K: 5241,
+        country: 'Armenia',
+        deaths: 2691,
+        deathsPer100K: 91,
+        population: 2965893,
+        recovered: 135638,
+        recoveredPer100K: 4573,
+        todayCases: 838,
+        todayCasesPer100K: 28,
+        todayDeaths: 18,
+        todayDeathsPer100K: 1,
+        todayRecovered: 1052,
+        todayRecoveredPer100K: 35,
+    },
+    {
+        cases: 32399,
+        casesPer100K: 70,
+        country: 'Uganda',
+        deaths: 245,
+        deathsPer100K: 1,
+        population: 46415146,
+        recovered: 10731,
+        recoveredPer100K: 23,
+        todayCases: 489,
+        todayCasesPer100K: 1,
+        todayDeaths: 7,
+        todayDeathsPer100K: 0,
+        todayRecovered: 85,
+        todayRecoveredPer100K: 0,
+    }];
 
 test('should return sortingByValue Array', () => {
     expect(sortData(sortDataArray, 'value')).toEqual(sortedDataByValue);
+});
+
+test('should return converted country name', () => {
+    expect(convertCountryName('United States')).toEqual('USA');
+    expect(convertCountryName('United Kingdom')).toEqual('UK');
+});
+
+test('should return country name', () => {
+    expect(convertCountryName('Belarus')).toEqual('Belarus');
+    expect(convertCountryName('Russia')).toEqual('Russia');
+});
+
+test('should return country with new properties', () => {
+    expect(() => {
+        addCriterions(fetchedCountries);
+        return (fetchedCountries[0] === changedCountries[0]
+            && fetchedCountries[1] === changedCountries[1]);
+    });
 });

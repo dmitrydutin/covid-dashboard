@@ -13,6 +13,7 @@ import Swiper from 'swiper/bundle';
 import 'swiper/swiper-bundle.css';
 import statesData from './custom.geo.json';
 import Store from '../../Store/store';
+import { convertCountryName, addCriterions } from '../../../../common/helpers';
 import Basic from '../Basic/Basic';
 import { mapAPI } from '../../../api/api';
 import { ACCESS_TOKEN, CRITERIONS } from '../../../../common/constants';
@@ -224,21 +225,7 @@ export default class CovidMap extends Basic {
 
             info.update = function (props) {
                 if (props) {
-                    let str;
-                    switch (props.name) {
-                        case 'United States':
-                            str = 'USA';
-                            break;
-                        case 'United Kingdom':
-                            str = 'UK';
-                            break;
-                        case 'South Korea':
-                            str = 'S. Korea';
-                            break;
-                        default:
-                            str = props.name;
-                            break;
-                    }
+                    const str = convertCountryName(props.name);
                     const countryIndex = data.map((element) => element.country)
                         .findIndex((elem) => elem === str);
                     if (countryIndex === -1) return;
@@ -358,43 +345,7 @@ export default class CovidMap extends Basic {
 
         if (response.status === 200) {
             this.data = response.data;
-            this.data.forEach((element) => {
-                element.casesPer100K = Number.isFinite(
-                    Math.round((element.cases * 100000)
-                        / element.population),
-                ) ? Math.round((element.cases * 100000)
-                    / element.population) : 100;
-
-                element.deathsPer100K = Number.isFinite(
-                    Math.round((element.deaths * 100000)
-                        / element.population),
-                ) ? Math.round((element.deaths * 100000)
-                    / element.population) : 100;
-
-                element.recoveredPer100K = Number.isFinite(
-                    Math.round((element.recovered * 100000)
-                        / element.population),
-                ) ? Math.round((element.recovered * 100000)
-                    / (element.population)) : 100;
-
-                element.todayCasesPer100K = Number.isFinite(
-                    Math.round((element.todayCases * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayCases * 100000)
-                    / element.population) : 1;
-
-                element.todayDeathsPer100K = Number.isFinite(
-                    Math.round((element.todayDeaths * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayDeaths * 100000)
-                    / element.population) : 1;
-
-                element.todayRecoveredPer100K = Number.isFinite(
-                    Math.round((element.todayRecovered * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayRecovered * 100000)
-                    / element.population) : 1;
-            });
+            addCriterions(this.data);
         } else {
             throw new Error('COVID-19 API FETCH ERROR');
         }
@@ -411,21 +362,7 @@ export default class CovidMap extends Basic {
     }
 
     #chooseCountryListener(countryName) {
-        let country;
-        switch (countryName) {
-            case 'United States':
-                country = 'USA';
-                break;
-            case 'United Kingdom':
-                country = 'UK';
-                break;
-            case 'South Korea':
-                country = 'S. Korea';
-                break;
-            default:
-                country = countryName;
-                break;
-        }
+        const country = convertCountryName(countryName);
         if (this.data.map((element) => element.country)
             .findIndex((elem) => elem === country) !== -1) {
             Store.country = country;
