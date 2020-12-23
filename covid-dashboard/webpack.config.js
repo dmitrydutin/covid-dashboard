@@ -11,7 +11,7 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: process.env.ASSET_PATH || '/',
+        publicPath: process.env.ASSET_PATH || './',
     },
     module: {
         rules: [
@@ -54,5 +54,10 @@ module.exports = {
         compress: true,
         port: 9000,
         open: true,
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
     },
 };
