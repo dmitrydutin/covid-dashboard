@@ -4,7 +4,7 @@ import Swiper from 'swiper/bundle';
 import Basic from '../Basic/Basic';
 
 import 'swiper/swiper-bundle.css';
-
+import { convertCountryName, addCriterions } from '../../../../common/helpers';
 import Store from '../../Store/store';
 import LeftArrow from '../../../../assets/images/left-arrow-diagram.svg';
 import RightArrow from '../../../../assets/images/right-arrow-diagram.svg';
@@ -83,27 +83,7 @@ export default class CovidTable extends Basic {
         const tdName = document.createElement('td');
         tdName.classList.add('statistics-table-td');
 
-        let str;
-        switch (Store.country) {
-            case 'United States':
-                str = 'USA';
-                break;
-            case 'United Kingdom':
-                str = 'UK';
-                break;
-            case 'South Korea':
-                str = 'S. Korea';
-                break;
-            case undefined:
-                str = 'Global';
-                break;
-            case null:
-                str = 'Global';
-                break;
-            default:
-                str = Store.country;
-                break;
-        }
+        const str = convertCountryName(Store.country);
         const countryIndex = this.data.map((element) => element.country)
             .findIndex((elem) => elem === str);
         if (countryIndex === -1) return;
@@ -202,43 +182,7 @@ export default class CovidTable extends Basic {
                 ...response2.data,
                 country: 'Global',
             });
-            this.data.forEach((element) => {
-                element.casesPer100K = Number.isFinite(
-                    Math.round((element.cases * 100000)
-                        / element.population),
-                ) ? Math.round((element.cases * 100000)
-                    / element.population) : 100;
-
-                element.deathsPer100K = Number.isFinite(
-                    Math.round((element.deaths * 100000)
-                        / element.population),
-                ) ? Math.round((element.deaths * 100000)
-                    / element.population) : 100;
-
-                element.recoveredPer100K = Number.isFinite(
-                    Math.round((element.recovered * 100000)
-                        / element.population),
-                ) ? Math.round((element.recovered * 100000)
-                    / (element.population)) : 100;
-
-                element.todayCasesPer100K = Number.isFinite(
-                    Math.round((element.todayCases * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayCases * 100000)
-                    / element.population) : 1;
-
-                element.todayDeathsPer100K = Number.isFinite(
-                    Math.round((element.todayDeaths * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayDeaths * 100000)
-                    / element.population) : 1;
-
-                element.todayRecoveredPer100K = Number.isFinite(
-                    Math.round((element.todayRecovered * 100000)
-                        / element.population),
-                ) ? Math.round((element.todayRecovered * 100000)
-                    / element.population) : 1;
-            });
+            addCriterions(this.data);
         } else {
             throw new Error('COVID-19 API FETCH ERROR');
         }

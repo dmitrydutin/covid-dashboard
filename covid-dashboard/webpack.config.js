@@ -9,7 +9,7 @@ const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'produ
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: process.env.ASSET_PATH || './',
     },
