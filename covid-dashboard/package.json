@@ -4,18 +4,18 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "lint": "node node_modules/eslint/bin/eslint.js ./src",
     "start": "jest && webpack serve --mode development",
-    "test": "jest"
+    "build": "webpack --mode production",
+    "test": "jest",
+    "dev": "webpack --mode development",
+    "lint": "node node_modules/eslint/bin/eslint.js ./src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apexcharts": "^3.23.0",
-    "axios": "^0.21.0",
+    "apexcharts": "^3.26.0",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "data.js": "^0.12.11",
     "leaflet": "^1.7.1",
